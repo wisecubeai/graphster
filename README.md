@@ -1,9 +1,9 @@
-# dstlr
+# wisecube
 
-`dstlr` is an open-source platform for scalable, end-to-end knowledge graph construction from unstructured text. The platform takes a collection of documents, extracts mentions and relations to populate a raw knowledge graph, links mentions to entities in Wikidata, and then enriches the knowledge graph with facts from Wikidata.
+`wisecube` is an open-source platform for scalable, end-to-end knowledge graph construction from unstructured text. The platform takes a collection of documents, extracts mentions and relations to populate a raw knowledge graph, links mentions to entities in Wikidata, and then enriches the knowledge graph with facts from Wikidata.
 See [`dstlr.ai`](http://dstlr.ai/) for an overview of the platform.
 
-The current `dstlr` demo "distills" the [TREC Washington Post Corpus](https://trec.nist.gov/data/wapost/) containing around 600K documents into a raw knowledge graph comprised of approximately 97M triples, enriched with facts from Wikidata for the 324K distinct entities discovered in the corpus.
+The current `wisecube` demo "distills" the [TREC Washington Post Corpus](https://trec.nist.gov/data/wapost/) containing around 600K documents into a raw knowledge graph comprised of approximately 97M triples, enriched with facts from Wikidata for the 324K distinct entities discovered in the corpus.
 On top of this knowledge graph, we have implemented a subgraph-matching approach to align extracted relations with facts from Wikidata using the declarative Cypher query language.
 This simple demo shows that fact verification, locating textual support for asserted facts, detecting inconsistent and missing facts, and extracting distantly-supervised training data can all be performed within the same framework.
  
