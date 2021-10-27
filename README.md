@@ -1,7 +1,7 @@
 # wisecube
 
 `wisecube` is an open-source platform for scalable, end-to-end knowledge graph construction from unstructured text. The platform takes a collection of documents, extracts mentions and relations to populate a raw knowledge graph, links mentions to entities in Wikidata, and then enriches the knowledge graph with facts from Wikidata.
-See [`dstlr.ai`](http://dstlr.ai/) for an overview of the platform.
+See [`wisecube.ai`](http://wisecube.ai/) for an overview of the platform.
 
 The current `wisecube` demo "distills" the [TREC Washington Post Corpus](https://trec.nist.gov/data/wapost/) containing around 600K documents into a raw knowledge graph comprised of approximately 97M triples, enriched with facts from Wikidata for the 324K distinct entities discovered in the corpus.
 On top of this knowledge graph, we have implemented a subgraph-matching approach to align extracted relations with facts from Wikidata using the declarative Cypher query language.
@@ -11,10 +11,10 @@ This README provies instructions on how to replicate our work.
 
 # Setup
 
-Clone [dstlr](https://github.com/dstlry/dstlr):
+Clone [wisecube](https://github.com/thecloudcircle/wisecube):
 
 ```
-git clone https://github.com/dstlry/dstlr.git
+git clone https://github.com/thecloudcircle/wisecube.git
 ```
 
 [sbt](https://www.scala-sbt.org/) is the build tool used for Scala projects, download it if you don't have it yet.
