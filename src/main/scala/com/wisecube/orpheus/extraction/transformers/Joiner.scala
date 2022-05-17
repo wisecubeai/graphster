@@ -1,8 +1,7 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.extraction.transformers
 
 import com.wisecube.orpheus.graph.ValueMeta
 import org.apache.spark.ml.Transformer
-import org.apache.spark.ml.param.shared.HasOutputCols
 import org.apache.spark.ml.param.{Param, ParamMap}
 import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.types.{StringType, StructField, StructType}

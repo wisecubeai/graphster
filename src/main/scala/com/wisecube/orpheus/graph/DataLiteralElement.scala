@@ -1,5 +1,6 @@
 package com.wisecube.orpheus.graph
 
+import org.apache.jena.datatypes.{BaseDatatype, RDFDatatype}
 import org.apache.jena.datatypes.xsd.XSDDatatype
 import org.apache.jena.ext.xerces.impl.dv.SchemaDVFactory
 import org.apache.jena.ext.xerces.impl.dv.xs.XSSimpleTypeDecl
@@ -12,12 +13,13 @@ import java.net.{URI, URISyntaxException}
 import scala.util.{Failure, Success, Try}
 
 case object DataLiteralElement extends NodeElement[Node_Literal] {
-  val xsdTypes: Map[String, String] = SchemaDVFactory.getInstance().getBuiltInTypes.getEntries
+  private val xsdNamespace: String = "http://www.w3.org/2001/XMLSchema"
+  val xsdTypes: Map[String, XSDDatatype] = SchemaDVFactory.getInstance().getBuiltInTypes.getEntries
     .filterNot(_.isInstanceOf[String])
     .map(_.asInstanceOf[XSSimpleTypeDecl])
     .map {
       typedecl =>
-        (typedecl.getName, typedecl.getNamespace + "#" + typedecl.getName)
+        (typedecl.getName, new XSDDatatype(typedecl.getName))
     }.toMap
 
   case class Meta(name: String, lex: AtomicValueMeta, datatype: AtomicValueMeta) extends NodeMeta {
@@ -38,14 +40,17 @@ case object DataLiteralElement extends NodeElement[Node_Literal] {
     def apply(name: String, lex: String, datatype: String): Meta = new Meta(name, LiteralValueMeta(lex), LiteralValueMeta(datatype))
   }
 
-  def parts2jena(lex: String, datatype: String): Node = {
-    val dt = Try(new URI(datatype)) match {
-      case Success(uri) if Option(uri.getScheme).exists(_.startsWith("http")) => uri.getFragment
-      case Success(_) => datatype
-      case Failure(_: URISyntaxException) if xsdTypes.contains(datatype) => datatype
+  private def getDatatype(datatype: String, failOnNull: Boolean = true): RDFDatatype = {
+    Try(new URI(datatype)) match {
+      case Success(uri) if uri.toString.startsWith(xsdNamespace) => xsdTypes(uri.getFragment)
+      case Success(_) => new BaseDatatype(datatype)
+      case Failure(_: URISyntaxException) if xsdTypes.contains(datatype) => xsdTypes(datatype)
       case _ => throw new IllegalArgumentException(s"Unrecognized datatype - $datatype")
     }
-    NodeFactory.createLiteral(lex, new XSDDatatype(dt))
+  }
+
+  def parts2jena(lex: String, datatype: String): Node = {
+    NodeFactory.createLiteral(lex, getDatatype(datatype))
   }
 
   override def jena2row(elem: Node): Row = buildRow(

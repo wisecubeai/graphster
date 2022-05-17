@@ -23,7 +23,6 @@ object ConcatValueMeta extends ValueMetaBuilder[ConcatValueMeta] {
   }
 
   override def fromMetadata(metadata: Metadata): ConcatValueMeta = ConcatValueMeta(
-    name = metadata.getString(ValueMeta.nameKey),
     values = metadata.getMetadataArray(valuesKey).map(ValueMeta.fromMetadata)
   )
 }

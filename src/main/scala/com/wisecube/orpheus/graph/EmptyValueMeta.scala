@@ -3,7 +3,7 @@ package com.wisecube.orpheus.graph
 import org.apache.spark.sql.{ Column, functions => sf }
 import org.apache.spark.sql.types.Metadata
 
-case class EmptyValueMeta() extends AtomicValueMeta {
+case class EmptyValueMeta() extends AtomicValueMeta with NodeMeta {
   override protected val builder: ValueMetaBuilder[_ >: EmptyValueMeta.this.type] = EmptyValueMeta
 
   override val name: String = EmptyValueMeta.name

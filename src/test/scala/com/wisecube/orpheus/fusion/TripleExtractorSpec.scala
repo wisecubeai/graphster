@@ -1,10 +1,10 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.fusion
 
-import com.wisecube.orpheus.graph.{BlankElement, ColumnValueMeta, DataLiteralElement, NodeElement, TripleElement, URIElement}
+import com.wisecube.orpheus.graph._
 import com.wisecube.orpheus.utils.SparkUtils
 import org.apache.spark.ml.Pipeline
-import org.scalatest.funsuite.AnyFunSuite
 import org.apache.spark.sql.{Row, functions => sf}
+import org.scalatest.funsuite.AnyFunSuite
 
 class TripleExtractorSpec extends AnyFunSuite {
   test("testing basic processing") {

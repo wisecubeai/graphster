@@ -1,11 +1,11 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.extraction.transformers
 
 import com.wisecube.orpheus.graph.{ColumnValueMeta, ConcatValueMeta, LiteralValueMeta}
 import com.wisecube.orpheus.utils.SparkUtils
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.SQLTransformer
-import org.scalatest.funsuite.AnyFunSuite
 import org.apache.spark.sql.{functions => sf}
+import org.scalatest.funsuite.AnyFunSuite
 
 class ValueBuilderSpec extends AnyFunSuite {
   test("testing basic processing") {

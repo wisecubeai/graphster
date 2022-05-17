@@ -4,7 +4,7 @@ import org.apache.spark.sql.{ Column, functions => sf }
 import org.apache.spark.sql.types.Metadata
 
 case class LiteralValueMeta(name: String, value: String) extends AtomicValueMeta {
-  if (name.isBlank && value.isBlank) {
+  if (name.isEmpty && value.isEmpty) {
     throw new IllegalArgumentException("either name or value must be non-empty/non-blank")
   }
 

@@ -12,7 +12,6 @@ case object URIElement extends NodeElement[Node_URI] {
     override def toColumn: Column = uri2row(uri.toColumn).as(name, toMetadata)
 
     override def toMetadata: Metadata = buildMetadata
-      .putString("name", name)
       .putMetadata(URIElement.uriKey, uri.toMetadata)
       .build()
   }

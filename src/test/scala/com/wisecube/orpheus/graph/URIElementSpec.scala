@@ -15,7 +15,7 @@ class  URIElementSpec extends AnyFunSuite {
     val stringExp = s"<$testURI>"
     val nodeExp = NodeFactory.createURI(testURI)
     val rowExp = new GenericRowWithSchema(
-      Array(classOf[Node_URI].getSimpleName, testURI, testNamespace, testLocal, null, null, null, null),
+      Array(classOf[Node_URI].getSimpleName, testURI, testNamespace, testLocal, null, null, null, null, null),
       URIElement.schema
     )
     val nodeObs = URIElement.parts2jena(testURI)

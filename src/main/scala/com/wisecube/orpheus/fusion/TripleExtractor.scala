@@ -1,11 +1,12 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.fusion
 
+import com.wisecube.orpheus.SparkImplicits._
+import com.wisecube.orpheus.graph._
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
+import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, Dataset, functions => sf}
-import com.wisecube.orpheus.graph._
-import org.apache.spark.ml.util.Identifiable
 
 class TripleExtractor(override val uid: String) extends Transformer {
 

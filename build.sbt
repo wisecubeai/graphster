@@ -11,7 +11,7 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % 
 
 libraryDependencies += "org.apache.spark" %% "spark-mllib" % "3.2.1" % "provided"
 
-libraryDependencies += ("org.apache.jena" % "jena-arq" % "4.4.0")
+libraryDependencies += ("org.apache.jena" % "jena-arq" % "3.17.0")
   .exclude("com.fasterxml.jackson.core", "jackson-databind")
 
 libraryDependencies += ("org.scalatest" %% "scalatest" % "3.2.11" % "test")

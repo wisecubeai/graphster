@@ -1,11 +1,11 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.fusion
 
-import com.wisecube.orpheus.graph.{BlankElement, ColumnValueMeta, DataLiteralElement, LangLiteralElement, LiteralValueMeta, NodeElement, URIElement}
+import com.wisecube.orpheus.graph._
 import com.wisecube.orpheus.utils.SparkUtils
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.SQLTransformer
-import org.scalatest.funsuite.AnyFunSuite
 import org.apache.spark.sql.{functions => sf}
+import org.scalatest.funsuite.AnyFunSuite
 
 class NodeExtractorSpec extends AnyFunSuite {
   test("testing basic processing") {

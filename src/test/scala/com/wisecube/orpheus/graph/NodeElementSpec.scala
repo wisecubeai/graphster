@@ -1,5 +1,6 @@
 package com.wisecube.orpheus.graph
 
+import com.wisecube.orpheus.utils.SparkUtils
 import org.apache.jena.datatypes.xsd.XSDDatatype
 import org.apache.jena.graph.NodeFactory
 import org.scalatest.funsuite.AnyFunSuite
@@ -53,5 +54,15 @@ class NodeElementSpec extends AnyFunSuite {
         assertResult(metaExp)(metaObs)
         assertResult(metadataExp)(metadataObs)
     }
+  }
+
+  test("Should get error row for malformed node string") {
+    val spark = SparkUtils.spark
+    val badURI = ":*:"
+    val badLiteral = "\"bad literal\\\"@en"
+    val goodLiteral = "\"good literal\"@en"
+    val df = spark.createDataFrame(Seq(Tuple1(badURI), Tuple1(badLiteral))).withColumnRenamed("_1", "nodeString")
+    val rows = df.select(NodeElement.string2row(df("nodeString")).as("node")).selectExpr("node.*").collect()
+    assertResult(2)(rows.count(row => row.getAs[String]("type") == "Node_Error"))
   }
 }

@@ -16,7 +16,7 @@ class DataLiteralElementSpec extends AnyFunSuite {
     val stringExp = s"""\"$testLex\"^^<${testDT.getURI}>"""
   val nodeExp = NodeFactory.createLiteral(testLex, testDT)
     val rowExp = new GenericRowWithSchema(
-      Array(classOf[Node_Literal].getSimpleName, null, null, null, testLex, null, testDT.getURI, null),
+      Array(classOf[Node_Literal].getSimpleName, null, null, null, testLex, null, testDT.getURI, null, null),
       DataLiteralElement.schema
     )
     val nodeObs = DataLiteralElement.parts2jena(testLex, testDT.getURI)

@@ -6,6 +6,8 @@ import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.types.{Metadata, StructField, StructType}
 import org.apache.spark.sql.{Column, Row, SparkSession, functions => sf}
 
+import scala.util.{Failure, Success, Try}
+
 case object TripleElement extends OrpheusElement[Triple] {
   val subjectKey: String = "subject"
   val predicateKey: String = "predicate"
@@ -58,8 +60,11 @@ case object TripleElement extends OrpheusElement[Triple] {
 
   override def string2jena(str: String): Triple = NTripleParser.parse(NTripleParser.triple, str) match {
     case NTripleParser.Success(triple, _) => triple
-    case failure: NTripleParser.Failure => throw new IllegalArgumentException(failure.msg)
-    case error: NTripleParser.Error => throw new IllegalArgumentException(error.msg)
+    case failure: NTripleParser.NoSuccess =>
+      Try(NTripleParser.fallbackTripleParser(str)) match {
+        case Success(triple) => triple
+        case Failure(exception) => throw new IllegalArgumentException(s"Cannot parse (with fallback) - $str")
+      }
   }
 
   lazy val row2triple: UserDefinedFunction = {

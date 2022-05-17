@@ -1,5 +1,6 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.fusion
 
+import com.wisecube.orpheus.SparkImplicits._
 import com.wisecube.orpheus.graph.{ColumnValueMeta, DataLiteralElement, TripleElement, URIElement}
 import com.wisecube.orpheus.utils.SparkUtils
 import org.apache.spark.ml.Pipeline

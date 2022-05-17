@@ -1,4 +1,4 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.extraction.transformers
 
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.{BooleanParam, ParamMap}

@@ -15,7 +15,7 @@ class LangLiteralElementSpec extends AnyFunSuite {
     val stringExp = s"""\"$testLex\"@$testLang"""
     val nodeExp = NodeFactory.createLiteral(testLex, testLang)
     val rowExp = new GenericRowWithSchema(
-      Array(classOf[Node_Literal].getSimpleName, null, null, null, testLex, testLang, null, null),
+      Array(classOf[Node_Literal].getSimpleName, null, null, null, testLex, testLang, null, null, null),
       LangLiteralElement.schema
     )
     val nodeObs = LangLiteralElement.parts2jena(testLex, testLang)

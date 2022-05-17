@@ -1,6 +1,7 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.fusion
 
 import com.wisecube.orpheus.graph.{NodeElement, ValueMeta}
+import com.wisecube.orpheus.SparkImplicits._
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.util.Identifiable

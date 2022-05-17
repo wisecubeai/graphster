@@ -13,7 +13,7 @@ class BlankElementSpec extends AnyFunSuite {
     val stringExp = s"_:$testBlankId"
     val nodeExp = NodeFactory.createBlankNode(testBlankId)
     val rowExp = new GenericRowWithSchema(
-      Array(classOf[Node_Blank].getSimpleName, null, null, null, null, null, null, testBlankId),
+      Array(classOf[Node_Blank].getSimpleName, null, null, null, null, null, null, testBlankId, null),
       BlankElement.schema
     )
     val nodeObs = BlankElement.parts2jena(testBlankId)

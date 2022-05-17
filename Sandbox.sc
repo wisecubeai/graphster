@@ -1,1 +1,1 @@
-println("%.0f".format(3.4))
+"a b c .".split(" +", 2)

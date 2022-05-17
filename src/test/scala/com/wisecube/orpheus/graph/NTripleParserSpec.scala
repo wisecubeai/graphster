@@ -9,6 +9,7 @@ class NTripleParserSpec extends AnyFunSuite {
     val uriPredicate = NodeFactory.createURI("http://www.example.org/predicate")
     val uriObject = NodeFactory.createURI("http://www.example.org/object")
     val literalObject = NodeFactory.createLiteral("literal", "en")
+    val literalMWObject = NodeFactory.createLiteral("trouble \\\" literal", "en")
     val blankSubject = NodeFactory.createBlankNode("xyz")
     val blankObject = NodeFactory.createBlankNode("abc")
 
@@ -16,7 +17,7 @@ class NTripleParserSpec extends AnyFunSuite {
     val uri2litExp = new Triple(uriSubject, uriPredicate, literalObject)
     val uri2blankExp = new Triple(uriSubject, uriPredicate, blankObject)
     val blank2uriExp = new Triple(blankSubject, uriPredicate, uriObject)
-    val blank2litExp = new Triple(blankSubject, uriPredicate, literalObject)
+    val blank2litExp = new Triple(blankSubject, uriPredicate, literalMWObject)
     val blank2blankExp = new Triple(blankSubject, uriPredicate, blankObject)
 
     val uri2uriStr = TripleElement.jena2string(uri2uriExp)

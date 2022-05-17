@@ -1,4 +1,4 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.fusion
 
 import com.wisecube.orpheus.graph._
 import com.wisecube.orpheus.utils.SparkUtils

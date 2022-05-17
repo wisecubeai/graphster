@@ -1,8 +1,7 @@
 package com.wisecube.orpheus.graph
 
 import com.wisecube.orpheus.utils.SparkUtils
-import org.apache.jena.graph.Triple
-import org.apache.jena.graph.NodeFactory
+import org.apache.jena.graph.{NodeFactory, Node_Blank, Node_URI, Triple}
 import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema
 import org.apache.spark.sql.types.MetadataBuilder
 import org.scalatest.funsuite.AnyFunSuite
@@ -102,5 +101,13 @@ class TripleElementSpec extends AnyFunSuite {
       s"row2string(${testName}.${TripleElement.objectKey}) = row2string(o)",
     ).mkString(" AND "))
       .collect().map(_.getBoolean(0)).forall(identity))
+  }
+
+  test("recover from single node error") {
+    val badTriple = "_:xyz <http://www.example.org/pred/p123> \"bad literal\\\" ."
+    val triple = TripleElement.string2jena(badTriple)
+    assert(triple.getSubject.isInstanceOf[Node_Blank])
+    assert(triple.getPredicate.isInstanceOf[Node_URI])
+    assert(triple.getObject.isInstanceOf[Node_Error])
   }
 }

@@ -1,10 +1,11 @@
-package com.wisecube.orpheus.extractors
+package com.wisecube.orpheus.fusion
 
+import com.wisecube.orpheus.HasInputColwSet
+import com.wisecube.orpheus.SparkImplicits._
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
-import org.apache.spark.ml.param.shared.{HasInputCol, HasOutputCol}
 import org.apache.spark.ml.util.Identifiable
-import org.apache.spark.sql.types.{MetadataBuilder, StructType}
+import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, Dataset}
 
 class TripleMarker(override val uid: String) extends Transformer with HasInputColwSet with HasTriple {
