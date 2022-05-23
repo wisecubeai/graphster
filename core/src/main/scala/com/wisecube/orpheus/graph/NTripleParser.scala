@@ -30,7 +30,7 @@ object NTripleParser extends RegexParsers {
     case _ ~ headChar ~ None => BlankElement.parts2jena(headChar)
   }
 
-  def stringLiteralQuote: Parser[String] = ("\"" ~ (("\\\"" | "[^\"\n\r]".r | echar | uchar) *) ~ ("\"" | "\\\"")) ^^ {
+  def stringLiteralQuote: Parser[String] = ("\"" ~ (("\\\"" | "[^\"\n\r]".r | echar | uchar) *) ~ "\"") ^^ {
     case _ ~ chars ~ _ => chars.mkString.replace("\\\\", "\\")
   }
 

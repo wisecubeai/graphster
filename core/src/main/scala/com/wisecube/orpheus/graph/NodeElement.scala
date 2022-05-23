@@ -75,7 +75,7 @@ abstract class NodeElement[T <: Node: ClassTag] extends OrpheusElement[Node] {
 
   override def string2jena(str: String): Node = NTripleParser.parse(NTripleParser.node, str) match {
     case NTripleParser.Success(node, _) => node
-    case failure: NTripleParser.NoSuccess => throw new IllegalArgumentException(failure.msg)
+    case error: NTripleParser.NoSuccess => ErrorElement.parts2jena(error.msg)
   }
 
   protected val getNodeClass: Class[_] = implicitly[ClassTag[T]].runtimeClass
