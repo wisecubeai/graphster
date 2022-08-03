@@ -2,7 +2,7 @@
 
 ## Configuration
 
-[Configuration example](./src/main/scala/com/wisecube/orpheus/graph/README.md)
+[Configuration example](./src/main/scala/com/wisecube/orpheus/config/README.md)
 
 #### RDF data
 
@@ -27,8 +27,9 @@ column CSV into a set of triples is very different from a database with dozens o
 Example 4. pipeline for extracting
 
 ```scala
-import com.wisecube.orpheus.extraction.transformers.{Joiner, ValueBuilder}
-import com.wisecube.orpheus.graph.{Configuration, URIElement}
+import com.wisecube.orpheus.enrichment.transformers.{Joiner, ValueBuilder}
+import com.wisecube.orpheus.config.Configuration
+import com.wisecube.orpheus.config.graph.URIGraphConf
 import org.apache.spark.ml.{Pipeline, PipelineModel}
 import org.apache.spark.ml.feature.SQLTransformer
 import org.apache.spark.sql.{DataFrame, SparkSession}
@@ -42,7 +43,7 @@ val config = Configuration.load("...")
 val pipeline: PipelineModel = new Pipeline().setStages(Array(
   new Joiner().setReferenceTable("...").setValueMetas(Array("left.a", "right.a", "...")).setOutputCols(Array("right.b", "right.c")),
   new SQLTransformer().setStatement("..."),
-  new ValueBuilder().setValueMeta(config.get[URIElement.Meta]("qid2uri").uri)
+  new ValueBuilder().setValueMeta(config.get[URIGraphConf.Meta]("qid2uri").uri)
 )).fit(data)
 
 val transformed = pipeline.transform(data)

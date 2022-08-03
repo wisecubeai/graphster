@@ -15,7 +15,7 @@ class NodeMarker(override val uid: String) extends Transformer with HasInputColw
   override def transform(dataset: Dataset[_]): DataFrame = dataset.select(
     dataset.schema.fields.map {
       case markedField if markedField.name == $(inputCol) =>
-        dataset($(inputCol)).as($(inputCol), markedField.metadata.addMetadata(NodesKey, $(nodeMeta).toMetadata))
+        dataset($(inputCol)).as($(inputCol), markedField.metadata.addMetadata(NodesKey, $(nodeMeta).metadata))
       case otherField => dataset(otherField.name)
     }: _*
   )
@@ -24,7 +24,7 @@ class NodeMarker(override val uid: String) extends Transformer with HasInputColw
 
   override def transformSchema(schema: StructType): StructType = StructType(schema.fields.map {
       case markedField if markedField.name == $(inputCol) =>
-        markedField.copy($(inputCol), metadata = markedField.metadata.addMetadata(NodesKey, $(nodeMeta).toMetadata))
+        markedField.copy($(inputCol), metadata = markedField.metadata.addMetadata(NodesKey, $(nodeMeta).metadata))
       case otherField => otherField
   })
 }

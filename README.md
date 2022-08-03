@@ -154,11 +154,3 @@ graph LR
     A((Gene)) -- encodes --> D((_:blank))
     D((_:blank)) -- interacts with --> C((Chemical))
 ```
-
-## Querying
-
-### SPARQL
-
-### Indexes
-
-### Custom insights

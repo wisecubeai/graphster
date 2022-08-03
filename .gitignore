@@ -6,3 +6,6 @@ target/
 venv/
 
 triples*/
+
+aact.zip
+aact/

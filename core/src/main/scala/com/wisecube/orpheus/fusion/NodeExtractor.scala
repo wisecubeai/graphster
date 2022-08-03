@@ -1,7 +1,8 @@
 package com.wisecube.orpheus.fusion
 
-import com.wisecube.orpheus.graph.{NodeElement, ValueMeta}
+import com.wisecube.orpheus.config.{Conf, ValueConf}
 import com.wisecube.orpheus.SparkImplicits._
+import com.wisecube.orpheus.config.graph.NodeConf
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.util.Identifiable
@@ -17,7 +18,7 @@ class NodeExtractor(override val uid: String) extends Transformer {
       dataset.schema.fields
         .filter(f => f.metadata.contains(NodesKey))
         .flatMap(_.metadata.getMetadataArrayOrElse(NodesKey))
-        .map(NodeElement.fromMetadata).map(_.toColumn): _*
+        .map(NodeConf.fromMetadata).map(_.toColumn): _*
   )
 
   override def copy(extra: ParamMap): Transformer = defaultCopy(extra)
@@ -26,7 +27,7 @@ class NodeExtractor(override val uid: String) extends Transformer {
     schema.fields
       .filter(f => f.metadata.contains(NodesKey))
       .flatMap(_.metadata.getMetadataArrayOrElse(NodesKey))
-      .map(m => StructField(m.getString(ValueMeta.nameKey), StringType, nullable = true, metadata = m))
+      .map(m => StructField(m.getString(ValueConf.NameKey), StringType, nullable = true, metadata = m))
       .foldLeft(schema)(_ add _)
   }
 }

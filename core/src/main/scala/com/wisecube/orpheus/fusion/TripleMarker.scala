@@ -13,9 +13,8 @@ class TripleMarker(override val uid: String) extends Transformer with HasInputCo
   def this() = this(Identifiable.randomUID("IdMatcher"))
 
   override def transform(dataset: Dataset[_]): DataFrame = {
-    require(dataset.schema.exists(_.name == $(inputCol)))
     dataset.select(dataset.schema.fields.map {
-      case f if f.name == $(inputCol) => dataset(f.name).as($(inputCol), f.metadata.addMetadata("triples", $(tripleMeta).toMetadata))
+      case f if f.name == $(inputCol) => dataset(f.name).as($(inputCol), f.metadata.addMetadata("triples", $(tripleMeta).metadata))
       case f => dataset(f.name)
     }: _*)
   }
@@ -23,9 +22,8 @@ class TripleMarker(override val uid: String) extends Transformer with HasInputCo
   override def copy(extra: ParamMap): TripleMarker = defaultCopy(extra)
 
   override def transformSchema(schema: StructType): StructType = {
-    require(schema.exists(_.name == $(inputCol)))
     StructType(schema.fields.map {
-      case f if f.name == $(inputCol) => f.copy(name = $(inputCol), metadata = f.metadata.addMetadata("triples", $(tripleMeta).toMetadata))
+      case f if f.name == $(inputCol) => f.copy(name = $(inputCol), metadata = f.metadata.addMetadata("triples", $(tripleMeta).metadata))
       case f => f
     })
   }

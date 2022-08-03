@@ -31,35 +31,62 @@ lazy val text = project
     settings,
     libraryDependencies ++= textDependencies
   )
+  .dependsOn(core)
 
 lazy val query = project
   .settings(
     name := "wisecube-query",
     settings,
-    libraryDependencies ++= coreDependencies
+    libraryDependencies ++= queryDependencies
   )
+  .dependsOn(core)
 
 lazy val ai = project
   .settings(
     name := "wisecube-ai",
     settings,
-    libraryDependencies ++= coreDependencies
+    libraryDependencies ++= aiDependenceis
   )
+  .dependsOn(core)
+
+lazy val datasets = project
+  .settings(
+    name := "wisecube-datasets",
+    settings,
+    libraryDependencies ++= datasetDependencies
+  )
+  .dependsOn(core)
+
+lazy val textjsl = project
+  .settings(
+    name := "wisecube-text-jsl",
+    settings,
+    libraryDependencies ++= textJSLDependencies
+  )
+  .dependsOn(core, text)
 
 lazy val dependencies = new {
-  val combinators = "org.scala-lang.modules" %% "scala-parser-combinators" % "2.1.1"
+  val combinators = ("org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2")
   val spark = "org.apache.spark" %% "spark-mllib" % "3.2.1" % "provided"
   val jena = ("org.apache.jena" % "jena-arq" % "3.17.0")
     .exclude("com.fasterxml.jackson.core", "jackson-databind")
   val scalatest = ("org.scalatest" %% "scalatest" % "3.2.11" % "test")
     .exclude("org.scala-lang.modules", "scala-xml")
+  val sparknlp = ("com.johnsnowlabs.nlp" %% "spark-nlp" % "3.4.4" % "provided")
+  val xml = ("com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % "2.12.3")
+  val yaml = ("com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.12.3")
+  val jacksonscala = ("com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.3")
+  val jsoup = "org.jsoup" % "jsoup" % "1.15.2"
 }
 
 lazy val coreDependencies = Seq(
   dependencies.combinators,
   dependencies.spark,
   dependencies.jena,
-  dependencies.scalatest
+  dependencies.scalatest,
+  dependencies.yaml,
+  dependencies.xml,
+  dependencies.jacksonscala,
 )
 
 lazy val textDependencies = Seq(
@@ -67,9 +94,23 @@ lazy val textDependencies = Seq(
   dependencies.scalatest
 )
 
+lazy val textJSLDependencies = textDependencies :+ dependencies.sparknlp
+
 lazy val queryDependencies = Seq(
   dependencies.spark,
   dependencies.jena,
+  dependencies.scalatest
+)
+
+val aiDependenceis = Seq(
+  dependencies.spark,
+  dependencies.scalatest
+)
+
+val datasetDependencies = Seq(
+  dependencies.spark,
+  dependencies.jena,
+  dependencies.jsoup,
   dependencies.scalatest
 )
 
@@ -94,6 +135,7 @@ lazy val assemblySettings = Seq(
       MergeStrategy.concat
     case PathList(ps @ _*) if Assembly.isReadme(ps.last) || Assembly.isLicenseFile(ps.last) =>
       MergeStrategy.rename
+    case x if x.endsWith("module-info.class") => MergeStrategy.discard
     case PathList("META-INF", xs @ _*) =>
       (xs map {_.toLowerCase}) match {
         case ("manifest.mf" :: Nil) | ("index.list" :: Nil) | ("dependencies" :: Nil) =>

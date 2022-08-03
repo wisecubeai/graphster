@@ -1,7 +1,8 @@
 package com.wisecube.orpheus.fusion
 
 import com.wisecube.orpheus.SparkImplicits._
-import com.wisecube.orpheus.graph._
+import com.wisecube.orpheus.config._
+import com.wisecube.orpheus.config.graph.TripleGraphConf
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.util.Identifiable
@@ -15,20 +16,20 @@ class TripleExtractor(override val uid: String) extends Transformer {
   override def transform(dataset: Dataset[_]): DataFrame = {
     val tripleMetas = dataset.schema.fields
       .flatMap(f => f.metadata.getMetadataArrayOrElse("triples"))
-      .map(TripleElement.fromMetadata)
+      .map(TripleGraphConf.fromMetadata)
     require(tripleMetas.nonEmpty)
     val tripleCols = tripleMetas.map(_.toColumn)
     dataset
       .select(sf.array(tripleCols: _*).as("triples"))
       .select(sf.explode(sf.col("triples")).as("triple"))
       .select(
-        sf.col("triple").getField(TripleElement.subjectKey).as(TripleElement.subjectKey),
-        sf.col("triple").getField(TripleElement.predicateKey).as(TripleElement.predicateKey),
-        sf.col("triple").getField(TripleElement.objectKey).as(TripleElement.objectKey),
+        sf.col("triple").getField(TripleGraphConf.SubjectKey).as(TripleGraphConf.SubjectKey),
+        sf.col("triple").getField(TripleGraphConf.PredicateKey).as(TripleGraphConf.PredicateKey),
+        sf.col("triple").getField(TripleGraphConf.ObjectKey).as(TripleGraphConf.ObjectKey),
       )
   }
 
   override def copy(extra: ParamMap): TripleExtractor = defaultCopy(extra)
 
-  override def transformSchema(schema: StructType): StructType = TripleElement.schema
+  override def transformSchema(schema: StructType): StructType = TripleGraphConf.schema
 }

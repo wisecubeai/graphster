@@ -4,7 +4,6 @@ import org.apache.spark.sql.types.{Metadata, MetadataBuilder}
 
 object SparkImplicits {
   implicit class MetadataWrapper(val metadata: Metadata) {
-
     def getLongOrElse(key: String, default: Option[Long] = None): Long = if (metadata.contains(key)) {
       metadata.getLong(key)
     } else {
