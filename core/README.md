@@ -27,9 +27,9 @@ column CSV into a set of triples is very different from a database with dozens o
 Example 4. pipeline for extracting
 
 ```scala
+import com.graphster.orpheus.config.Configuration
+import com.graphster.orpheus.config.graph.URIGraphConf
 import com.wisecube.orpheus.enrichment.transformers.{Joiner, ValueBuilder}
-import com.wisecube.orpheus.config.Configuration
-import com.wisecube.orpheus.config.graph.URIGraphConf
 import org.apache.spark.ml.{Pipeline, PipelineModel}
 import org.apache.spark.ml.feature.SQLTransformer
 import org.apache.spark.sql.{DataFrame, SparkSession}

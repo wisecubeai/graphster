@@ -1,10 +1,10 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
-ThisBuild / organization := "com.wisecube"
+ThisBuild / organization := "com.graphster"
 ThisBuild / scalaVersion := "2.12.14"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "wisecube"
+    name := "graphster"
   )
 
 lazy val global = project
@@ -20,14 +20,16 @@ lazy val global = project
 
 lazy val core = project
   .settings(
-    name := "wisecube-core",
+    moduleName := "graphster-core",
+    assembly / assemblyDefaultJarName := s"${moduleName.value}_${version.value}.jar",
     settings,
     libraryDependencies ++= coreDependencies
   )
 
 lazy val text = project
   .settings(
-    name := "wisecube-text",
+    moduleName := "graphster-text",
+    assembly / assemblyDefaultJarName := s"${moduleName.value}_${version.value}.jar",
     settings,
     libraryDependencies ++= textDependencies
   )
@@ -35,7 +37,8 @@ lazy val text = project
 
 lazy val query = project
   .settings(
-    name := "wisecube-query",
+    moduleName := "graphster-query",
+    assembly / assemblyDefaultJarName := s"${moduleName.value}_${version.value}.jar",
     settings,
     libraryDependencies ++= queryDependencies
   )
@@ -43,7 +46,8 @@ lazy val query = project
 
 lazy val ai = project
   .settings(
-    name := "wisecube-ai",
+    moduleName := "graphster-ai",
+    assembly / assemblyDefaultJarName := s"${moduleName.value}_${version.value}.jar",
     settings,
     libraryDependencies ++= aiDependenceis
   )
@@ -51,7 +55,8 @@ lazy val ai = project
 
 lazy val datasets = project
   .settings(
-    name := "wisecube-datasets",
+    moduleName := "graphster-datasets",
+    assembly / assemblyDefaultJarName := s"${moduleName.value}_${version.value}.jar",
     settings,
     libraryDependencies ++= datasetDependencies
   )
@@ -59,7 +64,8 @@ lazy val datasets = project
 
 lazy val textjsl = project
   .settings(
-    name := "wisecube-text-jsl",
+    moduleName := "graphster-text-jsl",
+    assembly / assemblyDefaultJarName := s"${moduleName.value}_${version.value}.jar",
     settings,
     libraryDependencies ++= textJSLDependencies
   )
@@ -70,13 +76,14 @@ lazy val dependencies = new {
   val spark = "org.apache.spark" %% "spark-mllib" % "3.2.1" % "provided"
   val jena = ("org.apache.jena" % "jena-arq" % "3.17.0")
     .exclude("com.fasterxml.jackson.core", "jackson-databind")
-  val scalatest = ("org.scalatest" %% "scalatest" % "3.2.11" % "test")
+  val scalatest = ("org.scalatest" %% "scalatest" % "3.2.12" % "test")
     .exclude("org.scala-lang.modules", "scala-xml")
   val sparknlp = ("com.johnsnowlabs.nlp" %% "spark-nlp" % "3.4.4" % "provided")
   val xml = ("com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % "2.12.3")
   val yaml = ("com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.12.3")
   val jacksonscala = ("com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.3")
   val jsoup = "org.jsoup" % "jsoup" % "1.15.2"
+  val bellman = "com.github.gsk-aiops" %% "bellman-spark-engine" % "2.0.0"
 }
 
 lazy val coreDependencies = Seq(
@@ -99,6 +106,7 @@ lazy val textJSLDependencies = textDependencies :+ dependencies.sparknlp
 lazy val queryDependencies = Seq(
   dependencies.spark,
   dependencies.jena,
+  dependencies.bellman,
   dependencies.scalatest
 )
 
@@ -128,7 +136,6 @@ lazy val assemblySettings = Seq(
   ThisBuild / assemblyShadeRules := Seq(
     ShadeRule.rename("org.apache.commons.logging.**" -> "shadelogging.@1").inAll
   ),
-  ThisBuild / assemblyJarName := name.value + ".jar",
   ThisBuild / assemblyMergeStrategy := {
     case PathList("shadelogging", xs @ _*) => MergeStrategy.first
     case x if Assembly.isConfigFile(x) =>
