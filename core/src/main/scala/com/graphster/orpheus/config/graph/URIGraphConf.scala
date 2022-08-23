@@ -1,26 +1,23 @@
 package com.graphster.orpheus.config.graph
 
 import com.graphster.orpheus.config.table.StringValueConf
-import com.graphster.orpheus.config.{Configuration, ValueConf, types}
 import com.graphster.orpheus.config.types.{ConfFieldType, MetadataField}
+import com.graphster.orpheus.config.{Configuration, ValueConf, types}
 import org.apache.jena.graph.{Node, NodeFactory, Node_URI}
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.{Column, Row, SparkSession}
 
-case class URIGraphConf(name: String, uri: ValueConf)
-  extends NodeConf(Configuration(
-    ValueConf.NameKey -> MetadataField(name),
-    NodeConf.UriKey -> MetadataField(uri),
-  )) {
+case class URIGraphConf(uri: ValueConf, kwargs: Configuration = Configuration.empty)
+  extends NodeConf(kwargs.add(NodeConf.UriKey -> MetadataField(uri))) {
+  override protected val defaultName: String = uri.name
 
-  override val keys: Set[String] = Set(ValueConf.NameKey, NodeConf.UriKey)
+  override val keys: Set[String] = kwargs.keys + NodeConf.UriKey
 
-  override def keyTypes: Map[String, types.MetadataFieldType] = Map(NodeConf.UriKey -> ConfFieldType)
+  override def keyTypes: Map[String, types.MetadataFieldType] = kwargs.keyTypes + (NodeConf.UriKey -> ConfFieldType)
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
     case NodeConf.UriKey => MetadataField(uri)
-    case _ => throw new NoSuchElementException()
+    case _ => kwargs.get(key)
   }
 
   override def toColumn: Column = URIGraphConf.uri2row(uri.toColumn).as(name, metadata)
@@ -56,10 +53,18 @@ object URIGraphConf extends NodeConfBuilder {
     spark.udf.register("uri2row", (parts2jena _).andThen(jena2row).andThen(NodeRow.apply))
   }
 
-  def apply(name: String, uri: String): URIGraphConf = new URIGraphConf(name, StringValueConf(uri))
+  def apply(uri: ValueConf, field: (String, MetadataField[_]), fields: (String, MetadataField[_])*): URIGraphConf =
+    apply(uri, Configuration(fields: _*).add(field))
 
-  override def apply(config: Configuration): NodeConf = new URIGraphConf(
-    config.getString(ValueConf.NameKey),
-    ValueConf.fromConfiguration(config.getConf(NodeConf.UriKey))
-  )
+  def apply(uri: String): URIGraphConf =
+    new URIGraphConf(StringValueConf(uri))
+
+  def apply(uri: String, field: (String, MetadataField[_]), fields: (String, MetadataField[_])*): URIGraphConf =
+    apply(StringValueConf(uri), Configuration(fields: _*).add(field))
+
+  override def apply(config: Configuration): NodeConf = {
+    val uri = ValueConf.fromConfiguration(config.getConf(NodeConf.UriKey))
+    val kwargs = config.remove(NodeConf.UriKey)
+    new URIGraphConf(uri, kwargs)
+  }
 }

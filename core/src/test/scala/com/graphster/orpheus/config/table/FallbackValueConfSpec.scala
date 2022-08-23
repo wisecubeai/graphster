@@ -8,22 +8,22 @@ import org.scalatest.funsuite.AnyFunSuite
 class FallbackValueConfSpec extends AnyFunSuite {
   test("basic creation") {
     val expColumns = Seq(
-      ColumnValueConf("a", "ix*ix"),
-      ColumnValueConf("b", "ix+ix"),
+      ColumnValueConf("ix*ix"),
+      ColumnValueConf("ix+ix"),
     )
     val expFinalVal = StringValueConf("XYZ")
-    val fvc = FallbackValueConf("test", expColumns, expFinalVal)
+    val fvc = FallbackValueConf(expColumns, expFinalVal)
     assertResult(expColumns)(fvc.columns)
     assertResult(expFinalVal)(fvc.finalVal)
   }
 
   test("conversions") {
     val expColumns = Seq(
-      ColumnValueConf("a", "ix*ix"),
-      ColumnValueConf("b", "ix+ix"),
+      ColumnValueConf("ix*ix"),
+      ColumnValueConf("ix+ix"),
     )
     val expFinalVal = StringValueConf("XYZ")
-    val fvc = FallbackValueConf("test", expColumns, expFinalVal)
+    val fvc = FallbackValueConf(expColumns, expFinalVal)
     val metadata = fvc.metadata
     val json = fvc.json
     val yaml = fvc.yaml
@@ -37,15 +37,15 @@ class FallbackValueConfSpec extends AnyFunSuite {
 
   test("columns") {
     val expColumns = Seq(
-      ColumnValueConf("a", "IF(ix % 2 = 0, NULL, 'a')"),
-      ColumnValueConf("b", "IF(ix % 4 = 0, NULL, 'b')"),
+      ColumnValueConf("IF(ix % 2 = 0, NULL, 'a')"),
+      ColumnValueConf("IF(ix % 4 = 0, NULL, 'b')"),
     )
     val expFinalVal = StringValueConf("final")
-    val fvc = FallbackValueConf("test", expColumns, expFinalVal)
+    val fvc = FallbackValueConf(expColumns, expFinalVal)
     val spark = SparkUtils.spark
     val df = SparkUtils.generateDataFrame(50)(expColumns.map(_.toColumn): _*)
       .select(sf.expr("*"), fvc.toColumn)
-    assert(df.columns.contains("test"))
+    assert(df.columns.contains(fvc.name))
     val (ixs, values) = df.collect().map(r => (r.getInt(0), r.getString(3))).unzip
     val expValues = ixs.map {
       ix =>

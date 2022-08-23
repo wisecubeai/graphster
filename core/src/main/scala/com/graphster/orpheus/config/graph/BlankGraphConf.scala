@@ -1,26 +1,24 @@
 package com.graphster.orpheus.config.graph
 
-import com.graphster.orpheus.config.{AtomicValue, Configuration, ValueConf}
 import com.graphster.orpheus.config.table.StringValueConf
 import com.graphster.orpheus.config.types.{ConfFieldType, MetadataField, MetadataFieldType}
+import com.graphster.orpheus.config.{AtomicValue, Configuration, ValueConf}
 import org.apache.jena.graph.{Node, NodeFactory, Node_Blank}
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.{Column, Row, SparkSession}
 
-case class BlankGraphConf(name: String, blankId: ValueConf with AtomicValue)
-  extends NodeConf(Configuration(
-    ValueConf.NameKey -> MetadataField(name),
-    NodeConf.BlankIdKey -> MetadataField(blankId),
-  )) {
+case class BlankGraphConf(blankId: ValueConf with AtomicValue, kwargs: Configuration = Configuration.empty)
+  extends NodeConf(kwargs.add(NodeConf.BlankIdKey, MetadataField(blankId))) {
 
-  override val keys: Set[String] = Set(ValueConf.NameKey, NodeConf.BlankIdKey)
+  override protected val defaultName: String = blankId.name
 
-  override val keyTypes: Map[String, MetadataFieldType] = Map(NodeConf.BlankIdKey -> ConfFieldType)
+  override val keys: Set[String] = kwargs.keys + NodeConf.BlankIdKey
+
+  override val keyTypes: Map[String, MetadataFieldType] = kwargs.keyTypes + (NodeConf.BlankIdKey -> ConfFieldType)
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
     case NodeConf.BlankIdKey => MetadataField(blankId)
-    case _ => throw new NoSuchElementException()
+    case _ => kwargs.get(key)
   }
 
   override def toColumn: Column = BlankGraphConf.blank2row(blankId.toColumn).as(name, metadata)
@@ -52,10 +50,12 @@ object BlankGraphConf extends NodeConfBuilder {
     spark.udf.register("blank2row", (parts2jena _).andThen(jena2row).andThen(NodeRow.apply))
   }
 
-  def apply(name: String, blankId: String): BlankGraphConf = new BlankGraphConf(name, StringValueConf(blankId))
+  def apply(blankId: String): BlankGraphConf =
+    new BlankGraphConf(StringValueConf(blankId))
 
-  override def apply(config: Configuration): BlankGraphConf = new BlankGraphConf(
-    config.getString(ValueConf.NameKey),
-    AtomicValue.fromConfiguration(config.getConf(NodeConf.BlankIdKey))
-  )
+  override def apply(config: Configuration): BlankGraphConf = {
+    val blankId = AtomicValue.fromConfiguration(config.getConf(NodeConf.BlankIdKey))
+    val kwargs = config.remove(NodeConf.BlankIdKey)
+    new BlankGraphConf(blankId, kwargs)
+  }
 }

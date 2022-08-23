@@ -1,21 +1,27 @@
 package com.graphster.orpheus.config.graph
 
+import com.graphster.orpheus.config.table.StringValueConf
+import com.graphster.orpheus.config.types.{BooleanFieldType, ConfFieldType, MetadataField, StringField}
 import com.graphster.orpheus.config.{AtomicValue, Configuration, ValueConf, types}
-import com.graphster.orpheus.config.types.{BooleanFieldType, ConfFieldType, MetadataField, StringFieldType}
 import org.apache.commons.codec.binary.Hex
 import org.apache.jena.graph.{Node, Node_Ext}
+import org.apache.spark.sql.catalyst.expressions.StringLiteral
 import org.apache.spark.sql.{Column, Row, functions => sf}
 
 import java.nio.charset.Charset
 import scala.language.implicitConversions
 
-case class ErrorGraphConf(name: String, errorMsg: ValueConf with AtomicValue, encodeMsg: Boolean = true)
-  extends NodeConf(
-    Configuration(
-      ValueConf.NameKey -> MetadataField(name),
+case class ErrorGraphConf(
+  errorMsg: ValueConf with AtomicValue,
+  encodeMsg: Boolean = true,
+  kwargs: Configuration = Configuration.empty
+) extends NodeConf(
+    kwargs.add(
       NodeConf.ErrorKey -> MetadataField(errorMsg),
       ErrorGraphConf.EncodeMsgKey -> MetadataField(encodeMsg)
     )) {
+  override protected val defaultName: String = errorMsg.name
+
   override def toColumn: Column = {
     val errorURI = if (encodeMsg) {
       sf.concat_ws(
@@ -33,19 +39,17 @@ case class ErrorGraphConf(name: String, errorMsg: ValueConf with AtomicValue, en
     URIGraphConf.uri2row(errorURI)
   }
 
-  override def keys: Set[String] = Set(ValueConf.NameKey, NodeConf.ErrorKey, ErrorGraphConf.EncodeMsgKey)
+  override def keys: Set[String] = kwargs.keys ++ Set(NodeConf.ErrorKey, ErrorGraphConf.EncodeMsgKey)
 
-  override def keyTypes: Map[String, types.MetadataFieldType] = Map(
-    ValueConf.NameKey -> StringFieldType,
+  override def keyTypes: Map[String, types.MetadataFieldType] = kwargs.keyTypes ++ Map(
     NodeConf.ErrorKey -> ConfFieldType,
     ErrorGraphConf.EncodeMsgKey -> BooleanFieldType
   )
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
     case NodeConf.ErrorKey => MetadataField(errorMsg)
     case ErrorGraphConf.EncodeMsgKey => MetadataField(encodeMsg)
-    case _ => throw new NoSuchElementException()
+    case _ => kwargs.get(key)
   }
 }
 
@@ -85,12 +89,31 @@ object ErrorGraphConf extends NodeConfBuilder {
 
   override def string2jena(str: String): Node = parts2jena(decodeMessage(getMessageHex(str)))
 
-  override def apply(config: Configuration): ErrorGraphConf =
-    new ErrorGraphConf(
-      config.getString(ValueConf.NameKey),
-      AtomicValue.fromConfiguration(config.getConf(NodeConf.ErrorKey)),
-      config.getBoolean(ErrorGraphConf.EncodeMsgKey)
-    )
+  def apply(
+    errorMsg: ValueConf with AtomicValue,
+    encodeMsg: Boolean,
+    field: (String, MetadataField[_]),
+    fields: (String, MetadataField[_])*): ErrorGraphConf =
+    new ErrorGraphConf(errorMsg, encodeMsg, Configuration(fields: _*).add(field))
+
+  def apply(
+    errorMsg: String,
+    encodeMsg: Boolean): ErrorGraphConf =
+    new ErrorGraphConf(StringValueConf(errorMsg), encodeMsg)
+
+  def apply(
+    errorMsg: String,
+    encodeMsg: Boolean,
+    field: (String, MetadataField[_]),
+    fields: (String, MetadataField[_])*): ErrorGraphConf =
+    new ErrorGraphConf(StringValueConf(errorMsg), encodeMsg, Configuration(fields: _*).add(field))
+
+  override def apply(config: Configuration): ErrorGraphConf = {
+    val errorMsg = AtomicValue.fromConfiguration(config.getConf(NodeConf.ErrorKey))
+    val encodeMsg = config.getBoolean(ErrorGraphConf.EncodeMsgKey)
+    val kwargs = config.remove(NodeConf.ErrorKey).remove(EncodeMsgKey)
+    new ErrorGraphConf(errorMsg, encodeMsg, kwargs)
+  }
 }
 
 case class Node_Error(error: Throwable) extends Node_Ext[Throwable](error)

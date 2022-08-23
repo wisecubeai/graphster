@@ -8,14 +8,14 @@ import org.scalatest.funsuite.AnyFunSuite
 class BlankGraphConfSpec extends AnyFunSuite {
   test("basic creation") {
     val expId = "abc"
-    val blank = BlankGraphConf("test", StringValueConf(expId))
+    val blank = BlankGraphConf(StringValueConf(expId))
     assertResult(StringValueConf(expId))(blank.blankId)
-    assertResult(blank)(BlankGraphConf("test", expId))
+    assertResult(blank)(BlankGraphConf(expId))
   }
 
   test("conversions") {
     val expId = "abc"
-    val blank = BlankGraphConf("test", StringValueConf(expId))
+    val blank = BlankGraphConf(StringValueConf(expId))
     val metadata = blank.metadata
     val json = blank.json
     val yaml = blank.yaml
@@ -33,10 +33,10 @@ class BlankGraphConfSpec extends AnyFunSuite {
       BlankGraphConf.NodeType,
       blankId = expId
     )
-    val blank = BlankGraphConf("test", StringValueConf(expId))
+    val blank = BlankGraphConf(StringValueConf(expId))
     val spark = SparkUtils.spark
     val df = SparkUtils.generateDataFrame(10)(blank.toColumn)
-    assert(df.columns.contains("test"))
+    assert(df.columns.contains(blank.name))
     val row = df.first()
     val nodeRow = NodeRow(row.getStruct(1))
     assertResult(expNodeRow)(nodeRow)

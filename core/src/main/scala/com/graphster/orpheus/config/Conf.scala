@@ -25,7 +25,7 @@ trait Conf extends Serializable {
 
   def get(key: String): MetadataField[_]
 
-  def getOrElse(key: String): Option[MetadataField[_]] =
+  def getOption(key: String): Option[MetadataField[_]] =
     if (contains(key)) {
       Some(get(key))
     } else {

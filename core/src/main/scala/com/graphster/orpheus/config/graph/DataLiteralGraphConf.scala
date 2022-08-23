@@ -1,9 +1,9 @@
 package com.graphster.orpheus.config.graph
 
+import com.graphster.orpheus.config.graph.DataLiteralGraphConf.{datalit2row, datalitnode}
 import com.graphster.orpheus.config.table.StringValueConf
-import DataLiteralGraphConf.{datalit2row, datalitnode}
+import com.graphster.orpheus.config.types.{ConfFieldType, MetadataField, MetadataFieldType}
 import com.graphster.orpheus.config.{AtomicValue, Configuration, ValueConf}
-import com.graphster.orpheus.config.types.{ConfFieldType, MetadataField, MetadataFieldType, StringFieldType}
 import org.apache.jena.datatypes.xsd.XSDDatatype
 import org.apache.jena.datatypes.{BaseDatatype, RDFDatatype}
 import org.apache.jena.ext.xerces.impl.dv.SchemaDVFactory
@@ -16,28 +16,26 @@ import java.net.{URI, URISyntaxException}
 import scala.util.{Failure, Success, Try}
 
 case class DataLiteralGraphConf(
-  name: String,
   lex: ValueConf with AtomicValue,
-  datatype: ValueConf with AtomicValue = StringValueConf(DataLiteralGraphConf.DefaultDatatype))
-  extends NodeConf(Configuration(
-    ValueConf.NameKey -> MetadataField(name),
+  datatype: ValueConf with AtomicValue = StringValueConf(DataLiteralGraphConf.DefaultDatatype),
+  kwargs: Configuration = Configuration.empty
+) extends NodeConf(kwargs.add(
     NodeConf.LexKey -> MetadataField(lex),
     NodeConf.DatatypeKey -> MetadataField(datatype),
   )) {
+  override protected val defaultName: String = lex.name
 
-  override val keys: Set[String] = Set(ValueConf.NameKey, NodeConf.LexKey, NodeConf.DatatypeKey)
+  override val keys: Set[String] = kwargs.keys ++ Set(NodeConf.LexKey, NodeConf.DatatypeKey)
 
-  override val keyTypes: Map[String, MetadataFieldType] = Map(
-    ValueConf.NameKey -> StringFieldType,
+  override val keyTypes: Map[String, MetadataFieldType] = kwargs.keyTypes ++ Map(
     NodeConf.LexKey -> ConfFieldType,
     NodeConf.DatatypeKey -> ConfFieldType
   )
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
     case NodeConf.LexKey => MetadataField(lex)
     case NodeConf.DatatypeKey => MetadataField(datatype)
-    case _ => throw new NoSuchElementException()
+    case _ => kwargs.get(key)
   }
 
   override def toColumn: Column = datalit2row(datalitnode(lex.toColumn, datatype.toColumn)).as(name, metadata)
@@ -96,18 +94,28 @@ object DataLiteralGraphConf extends NodeConfBuilder {
     spark.udf.register("datalit2row", (string2jena _).andThen(jena2row).andThen(NodeRow.apply))
   }
 
-  def apply(name: String, lex: ValueConf with AtomicValue, datatype: String): DataLiteralGraphConf =
-    new DataLiteralGraphConf(name, lex, StringValueConf(datatype))
+  def apply(
+    lex: ValueConf with AtomicValue,
+    datatype: String
+  ): DataLiteralGraphConf =
+    new DataLiteralGraphConf(lex, StringValueConf(datatype))
 
-  def apply(name: String, lex: String, datatype: ValueConf with AtomicValue): DataLiteralGraphConf =
-    new DataLiteralGraphConf(name, StringValueConf(lex), datatype)
+  def apply(
+    lex: String,
+    datatype: ValueConf with AtomicValue
+  ): DataLiteralGraphConf =
+    new DataLiteralGraphConf(StringValueConf(lex), datatype)
 
-  def apply(name: String, lex: String, datatype: String): DataLiteralGraphConf =
-    new DataLiteralGraphConf(name, StringValueConf(lex), StringValueConf(datatype))
+  def apply(
+    lex: String,
+    datatype: String
+  ): DataLiteralGraphConf =
+    new DataLiteralGraphConf(StringValueConf(lex), StringValueConf(datatype))
 
-  override def apply(config: Configuration): NodeConf = new DataLiteralGraphConf(
-    config.getString(ValueConf.NameKey),
-    AtomicValue.fromConfiguration(config.getConf(NodeConf.LexKey)),
-    AtomicValue.fromConfiguration(config.getConf(NodeConf.DatatypeKey))
-  )
+  override def apply(config: Configuration): NodeConf = {
+    val lex = AtomicValue.fromConfiguration(config.getConf(NodeConf.LexKey))
+    val datatype = AtomicValue.fromConfiguration(config.getConf(NodeConf.DatatypeKey))
+    val kwargs = config.remove(NodeConf.LexKey).remove(NodeConf.DatatypeKey)
+    new DataLiteralGraphConf(lex, datatype, kwargs)
+  }
 }

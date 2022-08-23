@@ -7,19 +7,19 @@ import org.scalatest.funsuite.AnyFunSuite
 class ConcatValueConfSpec extends AnyFunSuite {
   test("basic creation") {
     val expValues = Seq(
-      ColumnValueConf("sqr_ix", "ix*ix"),
+      ColumnValueConf("ix*ix"),
       StringValueConf("-test")
     )
-    val cvc = ConcatValueConf("test", expValues)
+    val cvc = ConcatValueConf(expValues)
     assertResult(expValues)(cvc.values)
   }
 
   test("conversions") {
     val expValues = Seq(
-      ColumnValueConf("sqr_ix", "ix*ix"),
+      ColumnValueConf("ix*ix"),
       StringValueConf("-test")
     )
-    val cvc = ConcatValueConf("test", expValues)
+    val cvc = ConcatValueConf(expValues)
     val metadata = cvc.metadata
     val json = cvc.json
     val yaml = cvc.yaml
@@ -33,13 +33,13 @@ class ConcatValueConfSpec extends AnyFunSuite {
 
   test("columns") {
     val expValues = Seq(
-      ColumnValueConf("sqr_ix", "ix*ix"),
+      ColumnValueConf("ix*ix"),
       StringValueConf("-test")
     )
-    val cvc = ConcatValueConf("test", expValues)
+    val cvc = ConcatValueConf(expValues)
     val spark = SparkUtils.spark
     val df = SparkUtils.generateDataFrame(10)(cvc.toColumn)
-    assert(df.columns.contains("test"))
+    assert(df.columns.contains(cvc.name))
     val (ixs, values) = df.collect().map(r => (r.getInt(0), r.getString(1))).unzip
     assertResult(ixs.map(ix => (ix * ix) + "-test"))(values)
   }

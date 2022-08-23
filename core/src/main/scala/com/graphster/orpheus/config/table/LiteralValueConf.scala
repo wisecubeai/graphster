@@ -1,13 +1,14 @@
 package com.graphster.orpheus.config.table
 
-import com.graphster.orpheus.config.{AtomicValue, Configuration, ValueConf, ValueConfBuilder}
 import com.graphster.orpheus.config._
-import com.graphster.orpheus.config.types.{DoubleFieldType, MetadataField, StringFieldType}
+import com.graphster.orpheus.config.types._
 import org.apache.spark.sql.{Column, functions => sf}
 
 trait LiteralValueConf {
   self: ValueConf with AtomicValue =>
   val datatype: String
+
+  override protected def defaultName: String = s"${datatype}_${LiteralValueConf.ValueKey}"
 
   override def keys: Set[String] = Set(ValueConf.NameKey, LiteralValueConf.DatatypeKey, LiteralValueConf.ValueKey)
 }
@@ -21,135 +22,130 @@ object LiteralValueConf extends ValueConfBuilder[ValueConf with AtomicValue with
   val StringType = "string"
 
   override def apply(config: Configuration): ValueConf with AtomicValue with LiteralValueConf =
-    config.getString(DatatypeKey) match {
-      case LongType => LongValueConf(config)
-      case DoubleType => DoubleValueConf(config)
-      case BooleanType => BooleanValueConf(config)
-      case StringType => StringValueConf(config)
+    config.get(ValueKey) match {
+      case LongField(_) => LongValueConf(config)
+      case DoubleField(_) => DoubleValueConf(config)
+      case BooleanField(_) => BooleanValueConf(config)
+      case StringField(_) => StringValueConf(config)
     }
 }
 
-case class LongValueConf(name: String, value: Long)
-  extends ValueConf(Configuration(
-    ValueConf.NameKey -> MetadataField(name),
-    LiteralValueConf.DatatypeKey -> MetadataField(LiteralValueConf.LongType),
-    LiteralValueConf.ValueKey -> MetadataField(value),
-  )) with AtomicValue with LiteralValueConf {
+case class LongValueConf(value: Long, kwargs: Configuration = Configuration.empty)
+  extends ValueConf(kwargs.add(LiteralValueConf.ValueKey -> MetadataField(value)))
+    with AtomicValue with LiteralValueConf {
   override val datatype: String = LiteralValueConf.LongType
 
   override def toColumn: Column = sf.lit(value).as(name, metadata)
 
-  override def keyTypes: Map[String, types.MetadataFieldType] = Map(
-    ValueConf.NameKey -> StringFieldType,
-    LiteralValueConf.DatatypeKey -> StringFieldType,
-    LiteralValueConf.ValueKey -> DoubleFieldType
-  )
+  override def keyTypes: Map[String, types.MetadataFieldType] =
+    kwargs.keyTypes + (LiteralValueConf.ValueKey -> DoubleFieldType)
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
-    case LiteralValueConf.DatatypeKey => MetadataField(datatype)
     case LiteralValueConf.ValueKey => MetadataField(value)
-    case _ => throw new NoSuchElementException()
+    case _ => kwargs.get(key)
   }
 }
 
 object LongValueConf extends ValueConfBuilder[LongValueConf] {
-  def apply(value: Long): LongValueConf = apply(LiteralValueConf.ValueKey, value)
+  def apply(value: Long): LongValueConf =
+    new LongValueConf(value)
 
-  override def apply(config: Configuration): LongValueConf =
-    LongValueConf(config.getString(ValueConf.NameKey), config.getLong(LiteralValueConf.ValueKey))
+  def apply(value: Long, field: (String, MetadataField[_]), fields: (String, MetadataField[_])*): LongValueConf =
+    new LongValueConf(value, Configuration(fields: _*).add(field))
+
+  override def apply(config: Configuration): LongValueConf = {
+    val value = config.getLong(LiteralValueConf.ValueKey)
+    val kwargs = config.remove(LiteralValueConf.ValueKey)
+    new LongValueConf(value, kwargs)
+  }
 }
 
-case class DoubleValueConf(name: String, value: Double)
-  extends ValueConf(Configuration(
-    ValueConf.NameKey -> MetadataField(name),
-    LiteralValueConf.DatatypeKey -> MetadataField(LiteralValueConf.DoubleType),
-    LiteralValueConf.ValueKey -> MetadataField(value),
-  )) with AtomicValue with LiteralValueConf {
+case class DoubleValueConf(value: Double, kwargs: Configuration = Configuration.empty)
+  extends ValueConf(kwargs.add(LiteralValueConf.ValueKey -> MetadataField(value)))
+    with AtomicValue with LiteralValueConf {
   override val datatype: String = LiteralValueConf.DoubleType
 
   override def toColumn: Column = sf.lit(value).as(name, metadata)
 
-  override def keyTypes: Map[String, types.MetadataFieldType] = Map(
-    ValueConf.NameKey -> StringFieldType,
-    LiteralValueConf.DatatypeKey -> StringFieldType,
-    LiteralValueConf.ValueKey -> DoubleFieldType
-  )
+  override def keyTypes: Map[String, types.MetadataFieldType] =
+    kwargs.keyTypes + (LiteralValueConf.ValueKey -> DoubleFieldType)
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
-    case LiteralValueConf.DatatypeKey => MetadataField(datatype)
     case LiteralValueConf.ValueKey => MetadataField(value)
+    case _ => kwargs.get(key)
   }
 }
 
 object DoubleValueConf extends ValueConfBuilder[DoubleValueConf] {
-  def apply(value: Double): DoubleValueConf = apply(LiteralValueConf.ValueKey, value)
+  def apply(value: Double): DoubleValueConf =
+    new DoubleValueConf(value)
 
-  override def apply(config: Configuration): DoubleValueConf =
-    DoubleValueConf(config.getString(ValueConf.NameKey), config.getDouble(LiteralValueConf.ValueKey))
+  def apply(value: Double, field: (String, MetadataField[_]), fields: (String, MetadataField[_])*): DoubleValueConf =
+    new DoubleValueConf(value, Configuration(fields: _*).add(field))
+
+  override def apply(config: Configuration): DoubleValueConf = {
+    val value = config.getDouble(LiteralValueConf.ValueKey)
+    val kwargs = config.remove(LiteralValueConf.ValueKey)
+    new DoubleValueConf(value, kwargs)
+  }
 }
 
-case class BooleanValueConf(name: String, value: Boolean)
-  extends ValueConf(Configuration(
-    ValueConf.NameKey -> MetadataField(name),
-    LiteralValueConf.DatatypeKey -> MetadataField(LiteralValueConf.BooleanType),
-    LiteralValueConf.ValueKey -> MetadataField(value),
-  )) with AtomicValue with LiteralValueConf {
+case class BooleanValueConf(value: Boolean, kwargs: Configuration = Configuration.empty)
+  extends ValueConf(kwargs.add(LiteralValueConf.ValueKey -> MetadataField(value)))
+    with AtomicValue with LiteralValueConf {
   override val datatype: String = LiteralValueConf.BooleanType
 
   override def toColumn: Column = sf.lit(value).as(name, metadata)
 
-  override def keyTypes: Map[String, types.MetadataFieldType] = Map(
-    ValueConf.NameKey -> StringFieldType,
-    LiteralValueConf.DatatypeKey -> StringFieldType,
-    LiteralValueConf.ValueKey -> DoubleFieldType
-  )
+  override def keyTypes: Map[String, types.MetadataFieldType] =
+    kwargs.keyTypes + (LiteralValueConf.ValueKey -> DoubleFieldType)
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
-    case LiteralValueConf.DatatypeKey => MetadataField(datatype)
     case LiteralValueConf.ValueKey => MetadataField(value)
+    case _ => kwargs.get(key)
   }
 }
 
 object BooleanValueConf extends ValueConfBuilder[BooleanValueConf] {
-  def apply(value: Boolean): BooleanValueConf = apply(LiteralValueConf.ValueKey, value)
+  def apply(value: Boolean): BooleanValueConf =
+    new BooleanValueConf(value)
 
-  override def apply(config: Configuration): BooleanValueConf =
-    BooleanValueConf(config.getString(ValueConf.NameKey), config.getBoolean(LiteralValueConf.ValueKey))
+  def apply(value: Boolean, field: (String, MetadataField[_]), fields: (String, MetadataField[_])*): BooleanValueConf =
+    new BooleanValueConf(value, Configuration(fields: _*).add(field))
+
+  override def apply(config: Configuration): BooleanValueConf = {
+    val value = config.getBoolean(LiteralValueConf.ValueKey)
+    val kwargs = config.remove(LiteralValueConf.ValueKey)
+    new BooleanValueConf(value, kwargs)
+  }
 }
 
-case class StringValueConf(name: String, value: String)
-  extends ValueConf(Configuration(
-    ValueConf.NameKey -> MetadataField(name),
-    LiteralValueConf.DatatypeKey -> MetadataField(LiteralValueConf.StringType),
-    LiteralValueConf.ValueKey -> MetadataField(value),
-  )) with AtomicValue with LiteralValueConf {
-  if (name.isEmpty && value.isEmpty) {
-    throw new IllegalArgumentException("either name or value must be non-empty/non-blank")
-  }
-
+case class StringValueConf(value: String, kwargs: Configuration = Configuration.empty)
+  extends ValueConf(kwargs.add(LiteralValueConf.ValueKey -> MetadataField(value)))
+    with AtomicValue with LiteralValueConf {
   override val datatype: String = LiteralValueConf.StringType
 
   override def toColumn: Column = sf.lit(value).as(name, metadata)
 
-  override def keyTypes: Map[String, types.MetadataFieldType] = Map(
-    ValueConf.NameKey -> StringFieldType,
-    LiteralValueConf.DatatypeKey -> StringFieldType,
-    LiteralValueConf.ValueKey -> DoubleFieldType
-  )
+  override def keyTypes: Map[String, types.MetadataFieldType] =
+    kwargs.keyTypes + (LiteralValueConf.ValueKey -> DoubleFieldType)
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
-    case LiteralValueConf.DatatypeKey => MetadataField(datatype)
     case LiteralValueConf.ValueKey => MetadataField(value)
+    case _ => kwargs.get(key)
   }
 }
 
 object StringValueConf extends ValueConfBuilder[StringValueConf] {
-  def apply(value: String): StringValueConf = apply(LiteralValueConf.ValueKey, value)
+  def apply(value: String): StringValueConf =
+    new StringValueConf(value)
 
-  override def apply(config: Configuration): StringValueConf =
-    StringValueConf(config.getString(ValueConf.NameKey), config.getString(LiteralValueConf.ValueKey))
+  def apply(value: String, field: (String, MetadataField[_]), fields: (String, MetadataField[_])*): StringValueConf =
+    new StringValueConf(value, Configuration(fields: _*).add(field))
+
+  override def apply(config: Configuration): StringValueConf = {
+    val value = config.getString(LiteralValueConf.ValueKey)
+    val kwargs = config.remove(LiteralValueConf.ValueKey)
+    new StringValueConf(value, kwargs)
+  }
 }

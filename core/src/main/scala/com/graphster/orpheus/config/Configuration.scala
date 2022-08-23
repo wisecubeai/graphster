@@ -49,6 +49,12 @@ case class Configuration(fields: Map[String, MetadataField[_]] = Map.empty)
   override def keyTypes: Map[String, MetadataFieldType] = fields.mapValues(_.fieldType)
 
   override def get(key: String): MetadataField[_] = fields(key)
+
+  def add(key: String, field: MetadataField[_]): Configuration = copy(fields + (key -> field))
+  def add(field: (String, MetadataField[_]), fields: (String, MetadataField[_])*): Configuration =
+    copy((this.fields + field) ++ fields.toMap)
+
+  def remove(key: String): Configuration = copy(fields - key)
 }
 
 object Configuration extends ConfBuilder[Configuration] {
@@ -72,6 +78,8 @@ object Configuration extends ConfBuilder[Configuration] {
       Configuration(fields)
     }
   }
+
+  def apply(fields: (String, MetadataField[_])*): Configuration = Configuration(fields.toMap)
 
   private def parseTree(tree: JsonNode): Configuration = {
     val fields = tree.fields().asScala.map(e => (e.getKey, e.getValue)).map {
@@ -101,8 +109,6 @@ object Configuration extends ConfBuilder[Configuration] {
   private def parseBoolean(boolNode: JsonNode): Boolean = boolNode.asBoolean()
 
   private def parseString(textNode: JsonNode): String = textNode.asText()
-
-  def apply(fields: (String, MetadataField[_])*): Configuration = Configuration(fields.toMap)
 
   override def fromMetadata(metadata: Metadata): Configuration = loadJSONString(metadata.json)
 

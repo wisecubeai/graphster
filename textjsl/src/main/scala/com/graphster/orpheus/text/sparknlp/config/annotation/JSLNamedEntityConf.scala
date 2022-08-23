@@ -8,11 +8,12 @@ import com.graphster.orpheus.text.config.annotation._
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.{Column, Row, SparkSession, functions => sf}
 
-case class JSLNamedEntityConf(name: String, column: String)
-  extends NamedEntityConf(JSLNamedEntityConf.AnnotationType, Configuration(
-    ValueConf.NameKey -> MetadataField(name),
+case class JSLNamedEntityConf(column: String, kwargs: Configuration = Configuration.empty)
+  extends NamedEntityConf(JSLNamedEntityConf.AnnotationType, kwargs.add(
     JSLAnnotation.ColumnKey -> MetadataField(column)
   )) with JSLAnnotation {
+  override protected val defaultName: String = s"${column}_${JSLNamedEntityConf.AnnotationType}"
+
   override def toColumn: Column = JSLNamedEntityConf.anno2rowUDF(sf.col(column)).as(name, metadata)
 }
 
@@ -29,9 +30,9 @@ object JSLNamedEntityConf extends NamedEntityConfBuilder with JSLAnnotationBuild
     spark.udf.register("jsl_ner2row", (annotation2row _).andThen(NamedEntityRow.apply))
   }
 
-  override def apply(config: Configuration): JSLNamedEntityConf =
-    new JSLNamedEntityConf(
-      config.getString(ValueConf.NameKey),
-      config.getString(JSLAnnotation.ColumnKey)
-    )
+  override def apply(config: Configuration): JSLNamedEntityConf = {
+    val column = config.getString(JSLAnnotation.ColumnKey)
+    val kwargs = config.remove(JSLAnnotation.ColumnKey)
+    new JSLNamedEntityConf(column, kwargs)
+  }
 }

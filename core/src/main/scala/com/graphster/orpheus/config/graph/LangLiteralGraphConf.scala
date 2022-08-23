@@ -1,33 +1,34 @@
 package com.graphster.orpheus.config.graph
 
+import com.graphster.orpheus.config.graph.LangLiteralGraphConf.{langlit2row, langlitnode}
 import com.graphster.orpheus.config.table.StringValueConf
-import LangLiteralGraphConf.{langlit2row, langlitnode}
+import com.graphster.orpheus.config.types.{ConfFieldType, MetadataField, MetadataFieldType}
 import com.graphster.orpheus.config.{AtomicValue, Configuration, ValueConf}
-import com.graphster.orpheus.config.types.{ConfFieldType, MetadataField, MetadataFieldType, StringFieldType}
 import org.apache.jena.graph.{Node, NodeFactory, Node_Literal}
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.{Column, Row, SparkSession}
 
-case class LangLiteralGraphConf(name: String, lex: ValueConf with AtomicValue, language: ValueConf with AtomicValue)
-  extends NodeConf(Configuration(
-    ValueConf.NameKey -> MetadataField(name),
+case class LangLiteralGraphConf(
+  lex: ValueConf with AtomicValue,
+  language: ValueConf with AtomicValue,
+  kwargs: Configuration = Configuration.empty
+) extends NodeConf(kwargs.add(
     NodeConf.LexKey -> MetadataField(lex),
     NodeConf.LanguageKey -> MetadataField(language),
   )) {
+  override protected val defaultName: String = lex.name
 
-  override val keys: Set[String] = Set(ValueConf.NameKey, NodeConf.LexKey, NodeConf.LanguageKey)
+  override val keys: Set[String] = kwargs.keys ++ Set(NodeConf.LexKey, NodeConf.LanguageKey)
 
-  override val keyTypes: Map[String, MetadataFieldType] = Map(
-    ValueConf.NameKey -> StringFieldType,
+  override val keyTypes: Map[String, MetadataFieldType] = kwargs.keyTypes ++ Map(
     NodeConf.LexKey -> ConfFieldType,
     NodeConf.LanguageKey -> ConfFieldType
   )
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
     case NodeConf.LexKey => MetadataField(lex)
     case NodeConf.LanguageKey => MetadataField(language)
-    case _ => throw new NoSuchElementException()
+    case _ => kwargs.get(key)
   }
   override def toColumn: Column = langlit2row(langlitnode(lex.toColumn, language.toColumn)).as(name, metadata)
 }
@@ -64,19 +65,61 @@ object LangLiteralGraphConf extends NodeConfBuilder {
     spark.udf.register("langlit2row", (string2jena _).andThen(jena2row).andThen(NodeRow.apply))
   }
 
-  def apply(name: String, lex: ValueConf with AtomicValue, language: String): LangLiteralGraphConf =
-    new LangLiteralGraphConf(name, lex, StringValueConf(language))
+  def apply((
+    lex: ValueConf with AtomicValue,
+    language: ValueConf with AtomicValue,
+    field: (String, MetadataField[_]),
+    fields: (String, MetadataField[_])*
+  ): LangLiteralGraphConf =
+    new LangLiteralGraphConf(lex, language, Configuration(fields: _*).add(field))
 
-  def apply(name: String, lex: String, language: ValueConf with AtomicValue): LangLiteralGraphConf =
-    new LangLiteralGraphConf(name, StringValueConf(lex), language)
+  def apply(
+    lex: ValueConf with AtomicValue,
+    language: String,
+  ): LangLiteralGraphConf =
+    new LangLiteralGraphConf(lex, StringValueConf(language))
 
-  def apply(name: String, lex: String, language: String): LangLiteralGraphConf =
-    new LangLiteralGraphConf(name, StringValueConf(lex), StringValueConf(language))
+  def apply(
+    lex: ValueConf with AtomicValue,
+    language: String,
+    field: (String, MetadataField[_]),
+    fields: (String, MetadataField[_])*
+  ): LangLiteralGraphConf =
+    new LangLiteralGraphConf(lex, StringValueConf(language), Configuration(fields: _*).add(field))
 
-  override def apply(config: Configuration): NodeConf = new LangLiteralGraphConf(
-    config.getString(ValueConf.NameKey),
-    AtomicValue.fromConfiguration(config.getConf(NodeConf.LexKey)),
-    AtomicValue.fromConfiguration(config.getConf(NodeConf.LanguageKey))
-  )
+  def apply(
+    lex: String,
+    language: ValueConf with AtomicValue,
+  ): LangLiteralGraphConf =
+    new LangLiteralGraphConf(StringValueConf(lex), language)
+
+  def apply(
+    lex: String,
+    language: ValueConf with AtomicValue,
+    field: (String, MetadataField[_]),
+    fields: (String, MetadataField[_])*
+  ): LangLiteralGraphConf =
+    new LangLiteralGraphConf(StringValueConf(lex), language, Configuration(fields: _*).add(field))
+
+  def apply(
+    lex: String,
+    language: String,
+  ): LangLiteralGraphConf =
+    new LangLiteralGraphConf(StringValueConf(lex), StringValueConf(language))
+
+  def apply(
+    lex: String,
+    language: String,
+    field: (String, MetadataField[_]),
+    fields: (String, MetadataField[_])*
+  ): LangLiteralGraphConf =
+    new LangLiteralGraphConf(StringValueConf(lex), StringValueConf(language), Configuration(fields: _*).add(field))
+
+  override def apply(config: Configuration): NodeConf = {
+    val lex = AtomicValue.fromConfiguration(config.getConf(NodeConf.LexKey))
+    val lang = AtomicValue.fromConfiguration(config.getConf(NodeConf.LanguageKey))
+    val kwargs = config.remove(NodeConf.LexKey).remove(NodeConf.LanguageKey)
+    new LangLiteralGraphConf(lex, lang, kwargs)
+  }
 
 }

@@ -4,7 +4,9 @@ import com.graphster.orpheus.config.{AtomicValue, Configuration, ValueConf, Valu
 import org.apache.spark.sql.{Column, functions => sf}
 
 case class EmptyValueConf private() extends ValueConf(Configuration.empty) with AtomicValue {
-  override val name: String = EmptyValueConf.Name
+  override protected val defaultName: String = EmptyValueConf.Name
+
+  override val kwargs: Configuration = Configuration.empty
 
   override def toColumn: Column = sf.lit(null).cast("string").as(name)
 

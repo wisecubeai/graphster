@@ -6,10 +6,10 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class LiteralValueConfSpec extends AnyFunSuite {
   test("basic creation") {
-    val lvc = LongValueConf(LiteralValueConf.ValueKey, 1)
-    val dvc = DoubleValueConf(LiteralValueConf.ValueKey, 2.0)
-    val bvc = BooleanValueConf(LiteralValueConf.ValueKey, value = true)
-    val svc = StringValueConf(LiteralValueConf.ValueKey, "XYZ")
+    val lvc = LongValueConf(1)
+    val dvc = DoubleValueConf(2.0)
+    val bvc = BooleanValueConf(value = true)
+    val svc = StringValueConf("XYZ")
 
     assertResult(lvc)(LongValueConf(1))
     assertResult(dvc)(DoubleValueConf(2.0))
@@ -18,10 +18,10 @@ class LiteralValueConfSpec extends AnyFunSuite {
   }
 
   test("conversions") {
-    val lvc = LongValueConf("Long", 1)
-    val dvc = DoubleValueConf("Double", 2.0)
-    val bvc = BooleanValueConf("Boolean", value = true)
-    val svc = StringValueConf("String", "XYZ")
+    val lvc = LongValueConf(1)
+    val dvc = DoubleValueConf(2.0)
+    val bvc = BooleanValueConf(value = true)
+    val svc = StringValueConf( "XYZ")
 
     Seq(lvc, dvc, bvc, svc).foreach {
       c =>
@@ -42,10 +42,10 @@ class LiteralValueConfSpec extends AnyFunSuite {
     val dexp = 2.0
     val bexp = true
     val sexp = "XYZ"
-    val lvc = LongValueConf("Long", lexp)
-    val dvc = DoubleValueConf("Double", dexp)
-    val bvc = BooleanValueConf("Boolean", bexp)
-    val svc = StringValueConf("String", sexp)
+    val lvc = LongValueConf(lexp)
+    val dvc = DoubleValueConf(dexp)
+    val bvc = BooleanValueConf(bexp)
+    val svc = StringValueConf(sexp)
     val spark = SparkUtils.spark
     val df = SparkUtils.generateDataFrame(10)(
       lvc.toColumn,

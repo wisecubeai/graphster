@@ -71,6 +71,15 @@ lazy val textjsl = project
   )
   .dependsOn(core, text)
 
+lazy val demo = project
+  .settings(
+    moduleName := "graphster-demo",
+    assembly / assemblyDefaultJarName := s"${moduleName.value}_${version.value}.jar",
+    settings,
+    libraryDependencies ++= (coreDependencies ++ datasetDependencies ++ queryDependencies).distinct
+  )
+  .dependsOn(core, datasets, query)
+
 lazy val dependencies = new {
   val combinators = ("org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2")
   val spark = "org.apache.spark" %% "spark-mllib" % "3.2.1" % "provided"

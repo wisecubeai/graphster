@@ -1,53 +1,56 @@
 package com.graphster.orpheus.config.graph
 
-import com.graphster.orpheus.config.{Configuration, ValueConf, types}
+import com.graphster.orpheus.config.types.{ConfFieldType, MetadataField}
+import com.graphster.orpheus.config.{Configuration, types}
 import com.graphster.orpheus.data.io.NTripleParser
-import com.graphster.orpheus.config.types.{ConfFieldType, MetadataField, StringFieldType}
 import org.apache.jena.graph.{Node, Triple}
 import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema
 import org.apache.spark.sql.expressions.UserDefinedFunction
-import org.apache.spark.sql.types.{Metadata, StructField, StructType}
+import org.apache.spark.sql.types.{StructField, StructType}
 import org.apache.spark.sql.{Column, Row, SparkSession, functions => sf}
 
 import scala.util.{Failure, Success, Try}
 
-case class TripleGraphConf(name: String, subject: NodeConf, predicate: NodeConf, `object`: NodeConf)
-  extends GraphConf[Triple](Configuration(
-    ValueConf.NameKey -> MetadataField(name),
+case class TripleGraphConf(
+  subject: NodeConf,
+  predicate: NodeConf,
+  `object`: NodeConf,
+  kwargs: Configuration = Configuration.empty
+) extends GraphConf[Triple](kwargs.add(
     TripleGraphConf.SubjectKey -> MetadataField(subject),
     TripleGraphConf.PredicateKey -> MetadataField(predicate),
     TripleGraphConf.ObjectKey -> MetadataField(`object`),
   )) {
-  override def toColumn: Column = sf.struct(
-    subject.toColumn.as(TripleGraphConf.SubjectKey, subject.metadata),
-    predicate.toColumn.as(TripleGraphConf.PredicateKey, predicate.metadata),
-    `object`.toColumn.as(TripleGraphConf.ObjectKey, `object`.metadata),
-  ).as(name, metadata)
+  override protected val defaultName: String = TripleGraphConf.DefaultName
 
-  override def keys: Set[String] = Set(
-    ValueConf.NameKey,
+  override def keys: Set[String] = kwargs.keys ++ Set(
     TripleGraphConf.SubjectKey,
     TripleGraphConf.PredicateKey,
     TripleGraphConf.ObjectKey,
   )
 
-  override def keyTypes: Map[String, types.MetadataFieldType] = Map(
-    ValueConf.NameKey -> StringFieldType,
+  override def keyTypes: Map[String, types.MetadataFieldType] = kwargs.keyTypes ++ Map(
     TripleGraphConf.SubjectKey -> ConfFieldType,
     TripleGraphConf.PredicateKey -> ConfFieldType,
     TripleGraphConf.ObjectKey -> ConfFieldType,
   )
 
   override def get(key: String): MetadataField[_] = key match {
-    case ValueConf.NameKey => MetadataField(name)
     case TripleGraphConf.SubjectKey => MetadataField(subject)
     case TripleGraphConf.PredicateKey => MetadataField(predicate)
     case TripleGraphConf.ObjectKey => MetadataField(`object`)
-    case _ => throw new NoSuchElementException()
+    case _ => kwargs.get(key)
   }
+
+  override def toColumn: Column = sf.struct(
+    subject.toColumn.as(TripleGraphConf.SubjectKey, subject.metadata),
+    predicate.toColumn.as(TripleGraphConf.PredicateKey, predicate.metadata),
+    `object`.toColumn.as(TripleGraphConf.ObjectKey, `object`.metadata),
+  ).as(name, metadata)
 }
 
 object TripleGraphConf extends GraphConfBuilder[Triple, TripleGraphConf] {
+  val DefaultName: String = "triple"
   val SubjectKey: String = "subject"
   val PredicateKey: String = "predicate"
   val ObjectKey: String = "object"
@@ -100,19 +103,13 @@ object TripleGraphConf extends GraphConfBuilder[Triple, TripleGraphConf] {
     spark.udf.register("triple2row", (string2jena _).andThen(jena2row).andThen(TripleRow.apply))
   }
 
-  override def fromMetadata(metadata: Metadata): TripleGraphConf = TripleGraphConf(
-    metadata.getString("name"),
-    NodeConf.fromMetadata(metadata.getMetadata(SubjectKey)),
-    NodeConf.fromMetadata(metadata.getMetadata(PredicateKey)),
-    NodeConf.fromMetadata(metadata.getMetadata(ObjectKey)),
-  )
-
-  override def apply(config: Configuration): TripleGraphConf = new TripleGraphConf(
-    config.getString(ValueConf.NameKey),
-    NodeConf(config.getConf(SubjectKey)),
-    NodeConf(config.getConf(PredicateKey)),
-    NodeConf(config.getConf(ObjectKey)),
-  )
+  override def apply(config: Configuration): TripleGraphConf = {
+    val subject = NodeConf(config.getConf(SubjectKey))
+    val predicate = NodeConf(config.getConf(PredicateKey))
+    val `object` = NodeConf(config.getConf(ObjectKey))
+    val kwargs = config.remove(SubjectKey).remove(PredicateKey).remove(ObjectKey)
+    new TripleGraphConf(subject, predicate, `object`, kwargs)
+  }
 }
 
 case class TripleRow(

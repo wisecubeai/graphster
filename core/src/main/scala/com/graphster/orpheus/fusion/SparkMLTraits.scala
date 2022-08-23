@@ -12,7 +12,7 @@ trait HasTriple extends Params {
   final def getTripleMeta: TripleGraphConf = $(tripleMeta)
   def setTripleMeta(value: TripleGraphConf): this.type = this.set(tripleMeta, value)
   def setTripleMeta(name: String, subject: Configuration, predicate: Configuration, `object`: Configuration): this.type =
-    setTripleMeta(new TripleGraphConf(name, NodeConf(subject), NodeConf(predicate), NodeConf(`object`)))
+    setTripleMeta(new TripleGraphConf(NodeConf(subject), NodeConf(predicate), NodeConf(`object`)))
 }
 
 trait HasNode extends Params {
