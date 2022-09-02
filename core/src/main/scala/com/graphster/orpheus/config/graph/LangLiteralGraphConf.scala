@@ -65,7 +65,7 @@ object LangLiteralGraphConf extends NodeConfBuilder {
     spark.udf.register("langlit2row", (string2jena _).andThen(jena2row).andThen(NodeRow.apply))
   }
 
-  def apply((
+  def apply(
     lex: ValueConf with AtomicValue,
     language: ValueConf with AtomicValue,
     field: (String, MetadataField[_]),

@@ -16,15 +16,7 @@ object ClinicalTrials {
     date: String = null,
     filename: String = null
   ): String = {
-    val url = "https://aact.ctti-clinicaltrials.org/pipe_files"
-    val doc = Jsoup.connect(url).get()
-    val downloadURL: String = {
-      if (date == null) {
-        doc.selectXpath(".//tr/td/a").first().attr("href")
-      } else {
-        doc.selectXpath(s".//tr[td = '$date']/td/a").attr("href")
-      }
-    }
+    val downloadURL = "https://graphster-data.s3.us-east-2.amazonaws.com/data/clinicaltrials/aact-20220902.zip"
     val _filename: String =
       if (filename == null) {
         downloadURL.split("/").last + ".zip"
