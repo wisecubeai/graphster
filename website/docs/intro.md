@@ -2,24 +2,24 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Graphster Intro
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Let's discover **Graphster in less than 5 minutes**.
 
 ## Getting Started
 
-Get started by **creating a new site**.
+Get started by **creating a new Knowledge Graph**.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+Or **try Graphster immediately** at **[docusaurus.new](https://docusaurus.new)**.
 
-### What you'll need
+### What you'll need to run graphster locally
 
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
+- [Apache Spark](https://nodejs.org/en/download/) version 16.14 or above:
   - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
 
-## Generate a new site
+## Create a new Knowledge Graph
 
-Generate a new Docusaurus site using the **classic template**.
+Generate a new Graphster Knowledge graph using the **classic template**.
 
 The classic template will automatically be added to your project after you run the command:
 
@@ -29,11 +29,11 @@ npm init docusaurus@latest my-website classic
 
 You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
 
-The command also installs all necessary dependencies you need to run Docusaurus.
+The command also installs all necessary dependencies you need to run Graphster.
 
-## Start your site
+## Start your Knowledge Graph
 
-Run the development server:
+Run the Graphster server:
 
 ```bash
 cd my-website
