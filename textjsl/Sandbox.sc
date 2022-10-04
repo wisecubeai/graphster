@@ -74,6 +74,8 @@ val nerReference = new NamedEntityReference()
     LangLiteralGraphConf(ColumnValueConf("named_entities.name"), "en")
   ))
 
+nerReference.transform(postNERTransformer.transform(ppc.loadPipeline.transform(df))).show()
+
 val textPipeline = new Pipeline().setStages(Array(
   ppc.loadPipeline,
   postNERTransformer,
@@ -81,4 +83,4 @@ val textPipeline = new Pipeline().setStages(Array(
 //  new TripleExtractor()
 )).fit(df)
 
-textPipeline.transform(df).show()
+//textPipeline.transform(df).show()

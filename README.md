@@ -15,18 +15,27 @@ This README provies instructions on how to use the library in your own project.
 
 # Table of contents <a name="toc"></a>
 1. [Setup](#setup)
-2. [Configuration](#configuration)
-3. [Data Sources](#datasource)
-4. [Extraction](#extraction)
-5. [Graph](#graph)
-    1. [RDF Data](#rdf)
-    2. [Other Graph Formats ](#formats)
-6. [Structured Data](#structured)
-7. [Text Data](#text)
-8. [Fusion](#fusion)
-9. [Mapping](#mapping)
-
-
+2. [How to build a knowledge graph](#howto)
+   1. [Configuration](#configuration)
+   2. [Data Sources](#datasource)
+   3. [Extraction](#extraction)
+   4. [Graph](#graph)
+      1. [RDF Data](#rdf)
+      2. [Other Graph Formats ](#formats)
+   5. [Structured Data](#structured)
+   6. [Text Data](#text)
+   7. [Fusion](#fusion)
+   8. [Mapping](#mapping)
+3. [Library](#library)
+   1. [Modules](#modules)
+   2. [Current](#current)
+   3. [Roadmap](#roadmap)
+4. [Examples](#examples)
+   1. [Configuration Examples](#conf-example)
+   2. [Structured Examples](#structured-example)
+   3. [Text Examples](#text-example)
+   4. [Query Examples](#query-example)
+   5. [AI Examples](#ai-example)
 
 ## Setup <a name="setup"></a>
 
@@ -37,12 +46,15 @@ git clone https://github.com/wisecubeai/graphster.git
 
 ```
 
+# How to build a knowledge graph <a name="howto"></a>
+
 
 ## Configuration <a name="configuration"></a>
 
-The configuration is used to create Spark `Metadata` objects. These objects define transformations between the source 
-data and the graph. All the necessary metadata objects can be kept in a single configuration file and loaded in 
-program that runs the pipelines.
+The foundation for any graphster pipeline is the configuration. 
+This allows you to not only set important properties, but also lets you simplify the references to data elements.
+In building a graph, there will be many explicit references to specific data elemetns (e.g. URIs). 
+Having these littered around your code hurts readability, and re-usability.
 
 [back to top](#toc)
 
@@ -184,3 +196,19 @@ graph LR
 ```
 
 [back to top](#toc)
+
+# Library <a name="library"></a>
+
+![ Graphster ](/website/graphster_architecture.png)
+
+## Modules <a name="modules"></a>
+## Current <a name="current"></a>
+## Roadmap <a name="roadmap"></a>
+
+# Examples <a name="examples"></a>
+
+## Configuration Examples <a name="conf-example"></a>
+## Structured Examples <a name="structured-example"></a>
+## Text Examples <a name="text-example"></a>
+## Query Examples <a name="query-example"></a>
+## AI Examples <a name="ai-example"></a>

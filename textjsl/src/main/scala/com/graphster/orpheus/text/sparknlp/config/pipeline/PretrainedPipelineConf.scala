@@ -1,15 +1,11 @@
 package com.graphster.orpheus.text.sparknlp.config.pipeline
 
-import com.graphster.orpheus.text.config.annotation.AnnotationConf
-import com.johnsnowlabs.nlp.SparkNLP
-import com.johnsnowlabs.nlp.pretrained.{PretrainedPipeline, ResourceDownloader}
 import com.graphster.orpheus.config.Configuration
-import com.graphster.orpheus.config.table.ColumnValueConf
 import com.graphster.orpheus.text.config.annotation.AnnotationConf
 import com.graphster.orpheus.text.config.pipeline.{PipelineConf, PipelineConfBuilder}
-import com.graphster.orpheus.text.sparknlp.config.annotation.{JSLAnnotation, JSLNamedEntityConf}
+import com.graphster.orpheus.text.sparknlp.config.annotation.JSLAnnotation
+import com.johnsnowlabs.nlp.pretrained.{PretrainedPipeline, ResourceDownloader}
 import org.apache.spark.ml.{PipelineModel, Transformer}
-import org.apache.spark.sql.functions
 
 case class PretrainedPipelineConf(
   outputs: Map[String, AnnotationConf],

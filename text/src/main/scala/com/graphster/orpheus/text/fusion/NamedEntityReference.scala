@@ -1,9 +1,8 @@
 package com.graphster.orpheus.text.fusion
 
+import com.graphster.orpheus.HasOutputColwSet
 import com.graphster.orpheus.SparkImplicits.MetadataWrapper
-import com.graphster.orpheus.{HasInputColwSet, HasOutputColwSet}
-import com.graphster.orpheus.config.graph.NodeConf
-import com.graphster.orpheus.fusion.{HasTriple, HasTriples}
+import com.graphster.orpheus.fusion.HasTriples
 import com.graphster.orpheus.text.config.annotation.{NamedEntityConf, NamedEntityRow}
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.{Param, ParamMap}
