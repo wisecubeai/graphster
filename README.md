@@ -28,7 +28,7 @@ This README provies instructions on how to use the library in your own project.
 
 
 
-# Setup <a name="setup"></a>
+## Setup <a name="setup"></a>
 
 Clone [graphster](https://github.com/wisecubeai/graphster):
 
