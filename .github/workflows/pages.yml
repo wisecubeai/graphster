@@ -34,7 +34,6 @@ jobs:
         with:
           source: ./
           destination: ./_site
-          markdown: GFM
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
 
@@ -43,6 +42,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+      markdown: GFM
     runs-on: ubuntu-latest
     needs: build
     steps:
