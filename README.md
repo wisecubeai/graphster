@@ -5,13 +5,13 @@
 It is a spark-based library purpose-built for scalable, end-to-end knowledge graph construction and querying from unstructured and structured source data. 
 The graphster library takes a collection of documents, extracts mentions and relations to populate a raw knowledge graph, links mentions to entities in Wikidata, and then enriches the knowledge graph with facts from Wikidata. Once the knowledge graph is built, graphster can also help natively query the knowledge graph using [`SPARQL`](https://en.wikipedia.org/wiki/SPARQL/).
 
-Give [`graphster.org`](https://github.com/wisecubeai/graphster) a try!
+Give [`graphster`](https://github.com/wisecubeai/graphster) a try!
 
 
 This README provies instructions on how to use the library in your own project.
 
 
-# Table of contents
+# Table of contents <a name="toc"></a>
 1. [Setup](#setup)
 2. [Configuration](#configuration)
 3. [Data Sources](#datasource)
@@ -42,6 +42,8 @@ The configuration is used to create Spark `Metadata` objects. These objects defi
 data and the graph. All the necessary metadata objects can be kept in a single configuration file and loaded in 
 program that runs the pipelines.
 
+[back to top](#toc)
+
 ## Data Sources <a name="datasource"></a>
 
 In order to build a knowledge graph you must be able to combine data from other graphs, structured data, and text data. 
@@ -60,6 +62,8 @@ processing into three phases.
 
 Now that we have broken up this complex process into more manageable parts, let's look at how this library helps 
 enable graph construction.
+
+[back to top](#toc)
 
 ## Extraction <a name="extraction"></a>
 
@@ -98,6 +102,8 @@ syntactic parsing, entity linking, and relationship extraction can also be utili
 
 The `wisecube-text` module is a module that acts as an interface to an NLP engine. There is an implementation with JSl 
 Spark NLP.
+
+[back to top](#toc)
 
 ## Fusion <a name="fusion"></a>
 
@@ -174,3 +180,5 @@ graph LR
     A((Gene)) -- encodes --> D((_:blank))
     D((_:blank)) -- interacts with --> C((Chemical))
 ```
+
+[back to top](#toc)
