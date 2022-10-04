@@ -1,7 +1,11 @@
+import com.graphster.orpheus.config.graph.{LangLiteralGraphConf, TripleGraphConf, URIGraphConf}
+import com.graphster.orpheus.config.table.{ColumnValueConf, StringValueConf}
+import com.graphster.orpheus.text.fusion.NamedEntityReference
+import com.graphster.orpheus.text.sparknlp.config.annotation.{JSLFinishedNamedEntityConf, JSLNamedEntityConf}
+import com.graphster.orpheus.text.sparknlp.config.pipeline.PretrainedPipelineConf
 import com.johnsnowlabs.nlp.SparkNLP
-import com.wisecube.orpheus.config.table.ColumnValueConf
-import com.wisecube.orpheus.text.sparknlp.config.annotation.JSLNamedEntityConf
-import com.wisecube.orpheus.text.sparknlp.config.pipeline.PretrainedPipelineConf
+import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.feature.SQLTransformer
 
 val spark = SparkNLP.start()
 import spark.implicits._
@@ -35,18 +39,46 @@ val text =
     |of the patient's progression to leukemia of bone marrow failure in the future.
     |""".stripMargin.replace("\n", "")
 
-val df = Seq((1, text)).toDF("id", "text")
+val df = Seq(("http://www.example.org/1", text)).toDF("id", "text")
 
 df.show()
 
 val ppc = PretrainedPipelineConf(
   Map("entities" -> JSLNamedEntityConf(
-    "named_entities",
     "entity"
   )),
-  "explain_document_ml", "en"
+  "nerdl_fewnerd_100d_pipeline", "en"
 )
 
-val pipeline = ppc.loadPipeline
+val postNERTransformer = new SQLTransformer().setStatement(
+  """
+    |SELECT EXPLODE(TRANSFORM(
+    | SEQUENCE(0, SIZE(finished_ner_chunk)-1),
+    | ix -> NAMED_STRUCT(
+    |   "name", finished_ner_chunk[ix],
+    |   "info", MAP(
+    |     "entity", finished_ner_chunk_metadata[ix*4],
+    |     "confidence", finished_ner_chunk_metadata[ix*4+3]
+    |   )
+    | )
+    |)) AS entity
+    |FROM __THIS__
+    |""".stripMargin)
 
-pipeline.transform(df).show()
+val nerReference = new NamedEntityReference()
+  .setNamedEntityConf(JSLFinishedNamedEntityConf("entity", "ner"))
+  .setOutputCol("named_entities")
+  .addTripleMeta(new TripleGraphConf(
+    URIGraphConf(ColumnValueConf("id")),
+    URIGraphConf(StringValueConf("https://schema.org/mentions")),
+    LangLiteralGraphConf(ColumnValueConf("named_entities.name"), "en")
+  ))
+
+val textPipeline = new Pipeline().setStages(Array(
+  ppc.loadPipeline,
+  postNERTransformer,
+  nerReference,
+//  new TripleExtractor()
+)).fit(df)
+
+textPipeline.transform(df).show()

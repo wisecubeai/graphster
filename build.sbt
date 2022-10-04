@@ -1,6 +1,8 @@
-ThisBuild / version := "0.1.0"
-ThisBuild / organization := "com.graphster"
-ThisBuild / scalaVersion := "2.12.14"
+lazy val buildSettings = Seq(
+  version := "0.1.1",
+  organization := "wisecubeai",
+  scalaVersion := "2.12.14",
+)
 
 lazy val root = (project in file("."))
   .settings(
@@ -71,6 +73,15 @@ lazy val textjsl = project
   )
   .dependsOn(core, text)
 
+lazy val subset = project
+  .settings(
+    moduleName := "graphster-subset",
+    assembly / assemblyDefaultJarName := s"${moduleName.value}_${version.value}.jar",
+    settings,
+    libraryDependencies ++= (coreDependencies ++ datasetDependencies ++ queryDependencies).distinct
+  )
+  .dependsOn(core, datasets, query)
+
 lazy val demo = project
   .settings(
     moduleName := "graphster-demo",
@@ -78,7 +89,7 @@ lazy val demo = project
     settings,
     libraryDependencies ++= (coreDependencies ++ datasetDependencies ++ queryDependencies).distinct
   )
-  .dependsOn(core, datasets, query)
+  .dependsOn(core, datasets, query, textjsl)
 
 lazy val dependencies = new {
   val combinators = ("org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2")
@@ -87,7 +98,7 @@ lazy val dependencies = new {
     .exclude("com.fasterxml.jackson.core", "jackson-databind")
   val scalatest = ("org.scalatest" %% "scalatest" % "3.2.12" % "test")
     .exclude("org.scala-lang.modules", "scala-xml")
-  val sparknlp = ("com.johnsnowlabs.nlp" %% "spark-nlp" % "3.4.4" % "provided")
+  val sparknlp = ("com.johnsnowlabs.nlp" %% "spark-nlp" % "4.1.0" % "provided")
   val xml = ("com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % "2.12.3")
   val yaml = ("com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.12.3")
   val jacksonscala = ("com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.3")
@@ -128,6 +139,12 @@ val datasetDependencies = Seq(
   dependencies.spark,
   dependencies.jena,
   dependencies.jsoup,
+  dependencies.scalatest
+)
+
+val subsetDependencies = Seq(
+  dependencies.spark,
+  dependencies.jena,
   dependencies.scalatest
 )
 

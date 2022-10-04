@@ -3,7 +3,7 @@ package com.graphster.orpheus.text.config.annotation
 import com.graphster.orpheus.config.Configuration
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema
-import org.apache.spark.sql.types.{StringType, StructField, StructType}
+import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 
 abstract class NamedEntityConf(annoType: String, config: Configuration) extends AnnotationConf(annoType, config)
 
@@ -28,6 +28,18 @@ trait NamedEntityConfBuilder extends AnnotationConfBuilder {
 case class NamedEntityRow(annotationType: String, location: Location, value: NamedEntity)
 
 object NamedEntityRow {
+  val schema = StructType(Seq(
+    StructField("annotationType", StringType),
+    StructField("location", StructType(Seq(
+      StructField("start", IntegerType),
+        StructField("end", IntegerType)
+    ))),
+    StructField("value", StructType(Seq(
+      StructField("entityName", IntegerType),
+      StructField("entityType", IntegerType)
+    ))),
+  ))
+
   def apply(row: Row): NamedEntityRow = row match {
     case Row(
       annotationType: String,
