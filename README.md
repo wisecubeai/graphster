@@ -1,20 +1,29 @@
-# graphster
+# Graphster
+
+![ Graphster ](/website/graphster_image.png)
 
 
-`graphster` is an open-source spark-based library for scalable, end-to-end knowledge graph construction and querying from unstructured and structured source data. The graphster library takes a collection of documents, extracts mentions and relations to populate a raw knowledge graph, links mentions to entities in Wikidata, and then enriches the knowledge graph with facts from Wikidata. Once the knowledge graph is built, graphster can also help natively query the knowledge graph using [`SPARQL`](https://en.wikipedia.org/wiki/SPARQL/).
+`Graphster` is an open-source knowledge graph library. 
+It is a spark-based library purpose-built for scalable, end-to-end knowledge graph construction and querying from unstructured and structured source data. 
+The graphster library takes a collection of documents, extracts mentions and relations to populate a raw knowledge graph, links mentions to entities in Wikidata, and then enriches the knowledge graph with facts from Wikidata. Once the knowledge graph is built, graphster can also help natively query the knowledge graph using [`SPARQL`](https://en.wikipedia.org/wiki/SPARQL/).
 
-See [`wisecube.org`](http://www.wisecube.org/) for an overview of the library.
+Give [`graphster.org`](http://www.graphster.org/) a try!
+
 
  
 This README provies instructions on how to use the library in your own project.
 
+
 # Setup
 
-Clone [wisecube](https://github.com/thecloudcircle/graphster):
+Clone [graphster](https://github.com/wisecubeai/graphster):
 
 ```
-git clone https://github.com/thecloudcircle/graphster.git
+git clone https://github.com/wisecubeai/graphster.git
+
 ```
+
+
 
 ## Configuration
 
