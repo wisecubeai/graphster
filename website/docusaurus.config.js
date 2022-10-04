@@ -8,8 +8,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Graphster Docs',
   tagline: 'Knowledge graphs made easy',
-  url: 'https://www.graphster.org',
-  baseUrl: '/',
+  url: 'wisecubeai.github.io',
+  baseUrl: '/graphster/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
