@@ -1,3 +1,5 @@
 description: "Graphster is an open-source knowledge graph library"
 email: "info@wisecube.ai"
 markdown: kramdown
+kramdown:
+  input: GFM
