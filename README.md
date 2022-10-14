@@ -1,4 +1,3 @@
-<script src="mermaid.full.min.js"></script>
 <a href="https://github.com/wisecubeai/graphster"><img align="right" loading="lazy" width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_green_007200.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
 
 ![ Graphster ](/website/graphster_image.png)
@@ -37,6 +36,7 @@ This README provies instructions on how to use the library in your own project.
    3. [Text Examples](#text-example)
    4. [Query Examples](#query-example)
    5. [AI Examples](#ai-example)
+5. [Tutorials & Presentations](#tutorials)
 
 ## Setup <a name="setup"></a>
 
@@ -203,13 +203,176 @@ graph LR
 ![ Graphster ](/website/graphster_architecture.png)
 
 ## Modules <a name="modules"></a>
-## Current <a name="current"></a>
+
+### Graphster Core
+
+The core module contains two main parts. The first is the configuration, 
+and the second part is for processing structured data into graphs. 
+
+### Graphster Datasets
+
+The datasets module contains code for general RDF format parsing. 
+It also contains code for setting up common datasets.
+
+Currently, we have code for the following datasets.
+
+- MeSH
+- Clinical Trials
+
+### Graphster Text
+
+The text module contains traits and generic components for building 
+a text-to-graph pipeline. There will be implementation modules 
+available NLP libraries. Currently, we are working on the reference 
+implementation using Spark NLP.
+
+### Graphster Query
+
+The query module is a wrapper around the Bellman project from GSK. 
+At the moment, graphs of with more than 25 million edges will be slow.
+
+### Graphster AI
+
+The AI module contains traits and generic components for building 
+machine learned models on the graph. For example, link prediction, 
+node classification, etc. Currently, we are working on the reference 
+implementation using DGL.
+
 ## Roadmap <a name="roadmap"></a>
+
+This are the efforts we are working on at the moment.
+
+### Graphster Examples & Tutorials
+
+We want to help people have all the knowledge they need to get 
+started on their knowledge graphs. So we are working building out 
+examples in the library, as well as a curriculum that will be more 
+generally helpful in building knowledge graphs.
+
+### PyGraphster
+
+Despite Scala be such a great language, we know that most data 
+scientists are more comfortable in Python. So we are working on Python 
+bindings to make Graphster more accessible.
+
+### Graphster Query optimization
+
+The popular implementations of RDF data stores are vertically scaled. 
+This means that if you have a large graph, you need to get a very 
+large machine. And scaling up an existing installation can be 
+time-consuming and expensive. It also requires that you leave Apache 
+Spark. We want to make it easy to prepare, build, and query your 
+knowledge graph all on Spark. To achieve this, we are working on 
+optimizing query the data from Spark.
+
+### Graphster Subsetting
+
+There are already many graph-structured data sets out there, like 
+Wikidata and PubChemRDF. However, many users do not need the entirety 
+of those graphs. Instead, they need to _subset_ these graphs. We are 
+building a module that will make subsetting on Spark easy.
 
 # Examples <a name="examples"></a>
 
 ## Configuration Examples <a name="conf-example"></a>
+
+```scala
+val typeConfig = Configuration(
+   "predicate" -> MetadataField(URIGraphConf("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
+   "trial" -> MetadataField(URIGraphConf("http://schema.org/MedicalTrial")),
+   "condition" -> MetadataField(URIGraphConf("http://schema.org/MedicalCondition")),
+   "intervention" -> MetadataField(URIGraphConf("http://schema.org/MedicalProcedure")),
+)
+```
+
+```yaml
+predicate:
+   uri:
+      value: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+condition:
+   uri:
+      value: "http://schema.org/MedicalCondition"
+trial:
+   uri:
+      value: "http://schema.org/MedicalTrial"
+intervention:
+   uri:
+      value: "http://schema.org/MedicalProcedure"
+```
+
 ## Structured Examples <a name="structured-example"></a>
+
+```scala
+// First we will remove the trials that are missing titles.
+val removeUntitled = new SQLTransformer().setStatement(
+  s"""
+    |SELECT *
+    |FROM __THIS__
+    |WHERE ${config / "nct" / "title" / "brief_title" / "lex" / "column" getString} IS NOT NULL
+    |AND ${config / "nct" / "title" / "official_title" / "lex" / "column" getString} IS NOT NULL
+    |""".stripMargin
+)
+
+// This is the transformer that marks a column with metadata that define a triple that can be extract from the table
+val nctType = new TripleMarker()
+  .setInputCol("nct_id") // column to be marked
+  .setTripleMeta(
+    "nct_type", // name
+    config / "nct" / "nct_uri" getConf, // SUBJECT
+    config / "types" / "predicate" getConf, // PREDICATE
+    config / "types" / "trial" getConf // OBJECT
+  )
+
+val nctFirstDate = new TripleMarker()
+  .setInputCol("nct_id") // column to be marked
+  .setTripleMeta(
+    "nct_date", // name
+    config / "nct" / "nct_uri" getConf, // SUBJECT
+    config / "nct" / "date" / "predicate" getConf, // PREDICATE
+    config / "nct" / "date" / "date" getConf // OBJECT
+  )
+```
+
 ## Text Examples <a name="text-example"></a>
+
 ## Query Examples <a name="query-example"></a>
-## AI Examples <a name="ai-example"></a>
+
+```sparql
+SELECT ?cond ?condLabel ?interv ?intervLabel (COUNT(?trial) AS ?numTrials)
+WHERE {
+ ?cond mv:broaderDescriptor :D001927 .      # get all immediate children of brain disease
+ ?trial rdf:type schema:MedicalTrial .      # get all clinical trials
+ ?trial schema:healthCondition ?c .         # get the condition being studied
+ ?trial schema:studySubject ?interv .       # get the intervention being studied
+ ?c rdf:type mv:TopicalDescriptor .         # limit to conditions that were linked to MeSH, and to the descriptor matches
+ ?c mv:broaderDescriptor* ?cond .           # limit to conditions that sub types of some immediate child of brain disease
+ ?cond rdfs:label ?condLabel .              # get the label for the immediate child of brain disease
+ ?interv rdf:type mv:TopicalDescriptor .    # limit to interventions that were linked to MeSH, and to the descriptor matches
+ ?interv rdfs:label ?intervLabel .          # get the label for the intervention
+}
+GROUP BY ?cond ?condLabel ?interv ?intervLabel # group by the immediate child of brain disease and the intervention
+```
+
+```scala
+val query = """
+    |SELECT ?cond ?condLabel ?interv ?intervLabel (COUNT(?trial) AS ?numTrials)
+    |WHERE {
+    | ?cond mv:broaderDescriptor :D001927 .
+    | ?trial rdf:type schema:MedicalTrial .
+    | ?trial schema:healthCondition ?c .
+    | ?trial schema:studySubject ?interv .
+    | ?c rdf:type mv:TopicalDescriptor .
+    | ?c mv:broaderDescriptor* ?cond .
+    | ?cond rdfs:label ?condLabel .
+    | ?interv rdf:type mv:TopicalDescriptor .
+    | ?interv rdfs:label ?intervLabel .
+    |}
+    |GROUP BY ?cond ?condLabel ?interv ?intervLabel
+    |""".stripMargin
+
+val results = triples.sparql(queryConfig, query).convertResults(Map("numTrials" -> "int"))
+```
+
+# Tutorials <a name="tutorials"></a>
+
+### [NLP Summit 2022](https://www.nlpsummit.org/building-analyzing-and-querying-biomedical-knowledge-graphs-using-graphster-a-new-spark-based-open-source-library/)
