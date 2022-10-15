@@ -10,7 +10,7 @@ The graphster library takes a collection of documents, extracts mentions and rel
 Give [`graphster`](https://github.com/wisecubeai/graphster) a try!
 
 
-This README provies instructions on how to use the library in your own project.
+This README provides instructions on how to use the library in your own project.
 
 
 # Table of contents <a name="toc"></a>
@@ -54,7 +54,7 @@ git clone https://github.com/wisecubeai/graphster.git
 
 The foundation for any graphster pipeline is the configuration. 
 This allows you to not only set important properties, but also lets you simplify the references to data elements.
-In building a graph, there will be many explicit references to specific data elemetns (e.g. URIs). 
+In building a graph, there will be many explicit references to specific data elements (e.g. URIs). 
 Having these littered around your code hurts readability, and re-usability.
 
 [back to top](#toc)
@@ -82,7 +82,7 @@ enable graph construction.
 
 ## Extraction <a name="extraction"></a>
 
-The extraction phase will generally by the most source-specific part of ingestion. In this part logic necessary for 
+The extraction phase will generally be the most source-specific part of ingestion. In this part logic necessary for 
 transforming the data into a format fusing into the ultimate graph's schema.
 
 ### Graph <a name="graph"></a>
@@ -135,16 +135,7 @@ design between the new data and the graph. The second is differences in the conv
 For example, if your graph has an "author" relationship between documents and authors, but the new data has "wrote" 
 relationship between authors and documents. 
 
-```mermaid
-graph TB
-    A{123} -- author --> B{456}
-    A -- rdfs:label --> C(Important Article) 
-    B -- rdfs:label --> D(Jane Doe) 
-    
-    F{123} -- wrote --> E{456}
-    E -- rdfs:label --> G(Important Article) 
-    F -- rdfs:label --> H(Jane Doe) 
-```
+![ Graphster ](/website/fig1.png)
 
 This is a simple example. The direction of the relationship needs only be reversed. Let's consider an example with a 
 deeper difference. Suppose the graph with which we are fusing keeps certain closely related terms as a single entity - 
@@ -152,49 +143,22 @@ deeper difference. Suppose the graph with which we are fusing keeps certain clos
 chemicals. The data that is being added only has genes and chemicals. In this data, relationships between a gene and a 
 chemical may actually represent a relationship between a protein encoded by the gene and the chemical.
 
-```mermaid
-graph LR
-    A((Gene)) -- encodes --> B((Protein))
-    B((Protein)) -- interacts with --> C((Chemical))
-    C((Chemical)) -- interacts with --> B((Protein))
-    
-    D((Gene)) -- interacts with --> E((Chemical))
-    E((Chemical)) -- interacts with --> D((Gene))
-```
+![ Graphster ](/website/fig2.png)
 
 How this is mapped to the target schema depends on what other data is available as well as how flexible the schema is. 
 If there is additional information about the gene-chemical edges that we can use to deduce the protein (e.g. pathway 
 information), that can be used. Another option, if no such information is available, is to overload the 
 `interacts with` edge in the target graph to allow gene-chemical relations.
 
-```mermaid
-graph LR
-    A((Gene)) -- encodes --> B((Protein))
-    B((Protein)) -- interacts with --> C((Chemical))
-    C((Chemical)) -- interacts with --> B((Protein))
-    A((Gene)) -- interacts with --> C((Chemical))
-```
+![ Graphster ](/website/fig3.png)
 
 If such overloading is not possible in the target schema, then these edges can be represented with a special edge.
 
-```mermaid
-graph LR
-    A((Gene)) -- encodes --> B((Protein))
-    B((Protein)) -- interacts with --> C((Chemical))
-    C((Chemical)) -- interacts with --> B((Protein))
-    A((Gene)) -- interacts through protein with --> C((Chemical))
-```
+![ Graphster ](/website/fig4.png)
 
 Another option is to use blank nodes, and to try and resolve them with other data.
 
-```mermaid
-graph LR
-    A((Gene)) -- encodes --> B((Protein))
-    B((Protein)) -- interacts with --> C((Chemical))
-    C((Chemical)) -- interacts with --> B((Protein))
-    A((Gene)) -- encodes --> D((_:blank))
-    D((_:blank)) -- interacts with --> C((Chemical))
-```
+![ Graphster ](/website/fig5.png)
 
 [back to top](#toc)
 
@@ -240,7 +204,7 @@ implementation using DGL.
 
 ## Roadmap <a name="roadmap"></a>
 
-This are the efforts we are working on at the moment.
+These are the efforts we are working on at the moment.
 
 ### Graphster Examples & Tutorials
 
