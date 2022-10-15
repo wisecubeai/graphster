@@ -339,4 +339,4 @@ val results = triples.sparql(queryConfig, query).convertResults(Map("numTrials" 
 
 # Tutorials <a name="tutorials"></a>
 
-### [NLP Summit 2022](https://www.nlpsummit.org/building-analyzing-and-querying-biomedical-knowledge-graphs-using-graphster-a-new-spark-based-open-source-library/)
+### [Graphster NLP Summit 2022 Talk](https://youtu.be/RzujPy3AE74)
