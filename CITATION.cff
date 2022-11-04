@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Thomas"
+  given-names: "Alex"
+  orcid: "https://orcid.org/0000-0002-5770-0695"
+- family-names: "Vettrivel"
+  given-names: "Vishnu"
+  orcid: "https://orcid.org/0000-0002-1025-0244"
+title: "Graphster: knowledge graph library"
+version: 0.1.1
+doi: 10.5281/zenodo.7278625
+date-released: 2022-11-03
+url: "https://github.com/wisecubeai/graphster"
