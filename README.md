@@ -10,6 +10,9 @@ The graphster library takes a collection of documents, extracts mentions and rel
 Give [`graphster`](https://github.com/wisecubeai/graphster) a try!
 
 
+[![DOI](https://zenodo.org/badge/419904389.svg)](https://zenodo.org/badge/latestdoi/419904389)
+
+
 This README provides instructions on how to use the library in your own project.
 
 
