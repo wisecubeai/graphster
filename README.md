@@ -7,10 +7,11 @@
 It is a spark-based library purpose-built for scalable, end-to-end knowledge graph construction and querying from unstructured and structured source data. 
 The graphster library takes a collection of documents, extracts mentions and relations to populate a raw knowledge graph, links mentions to entities in Wikidata, and then enriches the knowledge graph with facts from Wikidata. Once the knowledge graph is built, graphster can also help natively query the knowledge graph using [`SPARQL`](https://en.wikipedia.org/wiki/SPARQL/).
 
-Give [`graphster`](https://github.com/wisecubeai/graphster) a try!
-
+[![Apache License](https://img.shields.io/badge/License-Apache-green.svg)](https://choosealicense.com/licenses/apache-2.0/)
 
 [![DOI](https://zenodo.org/badge/419904389.svg)](https://zenodo.org/badge/latestdoi/419904389)
+
+Give [`graphster`](https://github.com/wisecubeai/graphster) a try!
 
 
 This README provides instructions on how to use the library in your own project.
@@ -41,6 +42,8 @@ This README provides instructions on how to use the library in your own project.
    5. [AI Examples](#ai-example)
 5. [Tutorials & Presentations](#tutorials)
 6. [Schedule a Demo](#demo)
+7. [Support](#support)
+
 
 
 ## Setup <a name="setup"></a>
@@ -353,4 +356,5 @@ val results = triples.sparql(queryConfig, query).convertResults(Map("numTrials" 
 ### [Book a Demo with Us](https://calendly.com/wisecube)
 
 
-
+# Support <a name="support"></a>
+### [Join the Discussion](https://github.com/wisecubeai/graphster/discussions) 
