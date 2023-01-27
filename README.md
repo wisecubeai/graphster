@@ -1,6 +1,6 @@
 <a href="https://github.com/wisecubeai/graphster"><img align="right" loading="lazy" width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_green_007200.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
 
-![ Graphster ](/website/graphster_image.png)
+![ Graphster ](/website/graphster_architecture_diagram.png)
 
 
 `Graphster` is an open-source knowledge graph library. 
