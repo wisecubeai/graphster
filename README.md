@@ -342,12 +342,15 @@ val query = """
 val results = triples.sparql(queryConfig, query).convertResults(Map("numTrials" -> "int"))
 ```
 
+[back to top](#toc)
+
 # Tutorials <a name="tutorials"></a>
 
 ### [![Watch the Tutorial](https://img.youtube.com/vi/RzujPy3AE74/hqdefault.jpg)](https://youtu.be/RzujPy3AE74)
 
 
-
-
 # Schedule a Demo <a name="demo"></a>
 ### [Book a Demo with Us](https://calendly.com/wisecube)
+
+
+
