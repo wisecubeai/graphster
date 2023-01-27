@@ -40,6 +40,8 @@ This README provides instructions on how to use the library in your own project.
    4. [Query Examples](#query-example)
    5. [AI Examples](#ai-example)
 5. [Tutorials & Presentations](#tutorials)
+6. [Schedule a Demo](#demo)
+
 
 ## Setup <a name="setup"></a>
 
@@ -343,3 +345,8 @@ val results = triples.sparql(queryConfig, query).convertResults(Map("numTrials" 
 # Tutorials <a name="tutorials"></a>
 
 ### [Graphster NLP Summit 2022 Talk](https://youtu.be/RzujPy3AE74)
+
+
+
+# Schedule a Demo <a name="Demo"></a>
+### [Book a Demo with Us](https://calendly.com/wisecube)
