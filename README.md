@@ -348,5 +348,5 @@ val results = triples.sparql(queryConfig, query).convertResults(Map("numTrials" 
 
 
 
-# Schedule a Demo <a name="Demo"></a>
+# Schedule a Demo <a name="demo"></a>
 ### [Book a Demo with Us](https://calendly.com/wisecube)
