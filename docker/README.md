@@ -30,38 +30,19 @@ docker run -u $(id -u) -p 8080:8080 --rm -v $PWD/logs:/logs -v $PWD/notebook:/no
 -u $(id -u) is to make sure you have the permission to write logs and notebooks.
 
 
-## Open Zeppelin and Spark History Server  
+## Open Zeppelin
 
 In your local browser 
 - Zeppelin: http://localhost:8088/#/
-- Spark History Server: http://localhost:18080/?showIncomplete=true
 
-Probably, you have to wait roughly 10 second until zeppelin daemon has been started, right after starting the container.
-
+you might have to wait around 10 second for the zeppelin daemon to start, right after running the container.
 
 
-## Spark-App
- 
-### Copy your spark jar to docker container
 
-Start another shell session and copy the jar-file into the docker container.
-Following command copies it into your latest started container.
-```
-docker cp <your-jar-file.jar> $(docker ps  -l -q):/work/
-```
+## Run Sample Graphster Notebooks
 
-
-###  Run spark job
-
-Go back to container session. You should be connected as root in the docker container:
-
-```
-cd /work
-spark-submit   --class <your-class-name-with-package> \
-      <your-jar-file.jar> \
-      [<your-program-parameters>]
-```
- 
+TBD
+  
 
 ## Changes in dockerfile
  

@@ -1,8 +1,8 @@
 
-# Licensed to the Apache Software Foundation (ASF) under one or more
+# Licensed to Wisecube AI under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
-# The ASF licenses this file to You under the Apache License, Version 2.0
+# Wisecube licenses this file to You under the Apache License, Version 2.0
 # (the "License"); you may not use this file except in compliance with
 # the License.  You may obtain a copy of the License at
 #
@@ -20,8 +20,6 @@ FROM ubuntu:23.04
 ENV Z_VERSION="0.10.0"
 ARG SPARK_VERSION="3.1.2"
 ARG HADOOP_VERSION="3.2"
-ARG DELTA_CORE_VERSION="2.1.2"
-ARG DELTA_VERSION="2.2.0"
 
 LABEL maintainer="Wisecube AI  <insights@wisecube.ai>"
 LABEL zeppelin.version=${Z_VERSION}
@@ -101,7 +99,6 @@ COPY log4j2_docker.properties ${ZEPPELIN_HOME}/conf/
 # SPARK
 ##########################################
 ARG SPARK_ARCHIVE=https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
-ARG DELTA_ARCHIVE=https://repo1.maven.org/maven2/io/delta/delta-core_${DELTA_CORE_VERSION}/${DELTA_VERSION}/delta-core_${DELTA_CORE_VERSION}-${DELTA_VERSION}.jar
 RUN mkdir /usr/local/spark &&\
     mkdir /tmp/spark-events  &&\
     chmod -R 777 /tmp/spark-events   # log-events for spark history server
@@ -109,7 +106,6 @@ ENV SPARK_HOME /usr/local/spark
 
 ENV PATH $PATH:${SPARK_HOME}/bin
 RUN curl -s ${SPARK_ARCHIVE} | tar -xz -C  /usr/local/spark --strip-components=1
-RUN curl -s ${DELTA_ARCHIVE} --output ${SPARK_HOME}/jars/delta-core_${DELTA_CORE_VERSION}-${DELTA_VERSION}.jar 
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
 
