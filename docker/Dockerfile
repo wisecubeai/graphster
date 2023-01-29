@@ -20,6 +20,8 @@ FROM ubuntu:23.04
 ENV Z_VERSION="0.10.0"
 ARG SPARK_VERSION="3.1.2"
 ARG HADOOP_VERSION="3.2"
+ARG GRAPHSTER_VERSION="0.1.1-SNAPSHOT"
+ARG GRAPHSTER_URL="https://github.com/wisecubeai/graphster/releases/download"
 
 LABEL maintainer="Wisecube AI  <insights@wisecube.ai>"
 LABEL zeppelin.version=${Z_VERSION}
@@ -108,6 +110,17 @@ ENV PATH $PATH:${SPARK_HOME}/bin
 RUN curl -s ${SPARK_ARCHIVE} | tar -xz -C  /usr/local/spark --strip-components=1
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
+
+##########################################
+# GRAPHSTER
+##########################################
+RUN mkdir /tmp/graphster &&\
+    chmod -R 777 /tmp/graphster   # graphster temp jar file location
+
+RUN wget -nv -O /tmp/graphster/graphster-core-assembly-${GRAPHSTER_VERSION}.jar ${GRAPHSTER_URL}/${GRAPHSTER_VERSION}/graphster-core-assembly-${GRAPHSTER_VERSION}.jar && \
+    wget -nv -O /tmp/graphster/graphster-datasets-assembly-${GRAPHSTER_VERSION}.jar ${GRAPHSTER_URL}/${GRAPHSTER_VERSION}/graphster-datasets-assembly-${GRAPHSTER_VERSION}.jar && \
+    wget -nv -O /tmp/graphster/query-assembly-${GRAPHSTER_VERSION}.jar ${GRAPHSTER_URL}/${GRAPHSTER_VERSION}/query-assembly-${GRAPHSTER_VERSION}.jar && \
+    mv /tmp/graphster/*.jar ${SPARK_HOME}/jars/
 
 
 USER 1000
