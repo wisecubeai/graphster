@@ -123,6 +123,7 @@ RUN wget -nv -O /tmp/graphster/graphster-core-assembly-${GRAPHSTER_VERSION}.jar 
     mv /tmp/graphster/*.jar ${SPARK_HOME}/jars/
 
 COPY notebook/zeppelin/ ${ZEPPELIN_HOME}/notebook/
+RUN  rm -rf "${ZEPPELIN_HOME}/notebook/Flink Tutorial"
 
 
 USER 1000
