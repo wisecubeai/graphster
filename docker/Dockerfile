@@ -40,7 +40,7 @@ ENV LOG_TAG="[ZEPPELIN_${Z_VERSION}]:" \
 RUN echo "$LOG_TAG install basic packages" && \
     apt-get -y update && \
     # Switch back to install JRE instead of JDK when moving to JDK9 or later.
-    DEBIAN_FRONTEND=noninteractive apt-get install -y locales language-pack-en tini openjdk-8-jdk-headless wget curl less vim unzip && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y locales language-pack-en tini openjdk-8-jdk-headless wget curl less vim unzip zip && \
     # Cleanup
     rm -rf /var/lib/apt/lists/* && \
     apt-get autoclean && \
@@ -124,6 +124,16 @@ RUN wget -nv -O /tmp/graphster/graphster-core-assembly-${GRAPHSTER_VERSION}.jar 
 
 COPY notebook/zeppelin/ ${ZEPPELIN_HOME}/notebook/
 RUN  rm -rf "${ZEPPELIN_HOME}/notebook/Flink Tutorial"
+COPY home.html /tmp/home.html
+RUN  mkdir /tmp/zeppelin-web && \
+     cp ${ZEPPELIN_HOME}/zeppelin-web-${Z_VERSION}.war /tmp/zeppelin-web/ && \
+     cd /tmp/zeppelin-web && \
+     unzip /tmp/zeppelin-web/zeppelin-web-${Z_VERSION}.war
+RUN  mv -f /tmp/home.html /tmp/zeppelin-web/app/home/ && \
+     cd /tmp/zeppelin-web && \
+     zip -u zeppelin-web-${Z_VERSION}.war app/home/home.html && \
+     mv -f zeppelin-web-${Z_VERSION}.war ${ZEPPELIN_HOME}/
+
 
 
 USER 1000
