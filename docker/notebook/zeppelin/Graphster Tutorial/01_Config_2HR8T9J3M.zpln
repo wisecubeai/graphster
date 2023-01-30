@@ -1,0 +1,843 @@
+﻿{
+  "paragraphs": [
+    {
+      "text": "%md \nIn this notebook we set up the initial configurations for our knowledge graph.\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:04:19+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675032503104_738849385",
+      "id": "paragraph_1675032503104_738849385",
+      "dateCreated": "2023-01-29T22:48:23+0000",
+      "dateStarted": "2023-01-29T23:04:19+0000",
+      "dateFinished": "2023-01-29T23:04:19+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:5013",
+      "title": "Creating a Knowledge Graph from MeSH and Clinical Trials: Config",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>In this notebook we set up the initial configurations for our knowledge graph.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "import com.graphster.orpheus.config.Configuration\nimport com.graphster.orpheus.config.graph._\nimport com.graphster.orpheus.config.table._\nimport com.graphster.orpheus.config.types.MetadataField\nimport com.graphster.orpheus.query.config._\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:04:36+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675032661928_2098255587",
+      "id": "paragraph_1675032661928_2098255587",
+      "dateCreated": "2023-01-29T22:51:01+0000",
+      "dateStarted": "2023-01-29T22:59:16+0000",
+      "dateFinished": "2023-01-29T22:59:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:5015",
+      "title": "Import libraries",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import com.graphster.orpheus.config.Configuration\nimport com.graphster.orpheus.config.graph._\nimport com.graphster.orpheus.config.table._\nimport com.graphster.orpheus.config.types.MetadataField\nimport com.graphster.orpheus.query.config._\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%md \nIn this demo we will use all of MeSH, so we don't need to worry about extracting specific data.\n\nFor the clinical trials, we need to have\n\nthe trial\nthe condition\nthe intervention.\nSo let's start with determining the types we will need.",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:04:57+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675032680616_1166518919",
+      "id": "paragraph_1675032680616_1166518919",
+      "dateCreated": "2023-01-29T22:51:20+0000",
+      "dateStarted": "2023-01-29T23:04:57+0000",
+      "dateFinished": "2023-01-29T23:04:57+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:5016",
+      "title": "1. Define entities to be extracted",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>In this demo we will use all of MeSH, so we don&rsquo;t need to worry about extracting specific data.</p>\n<p>For the clinical trials, we need to have</p>\n<p>the trial<br />\nthe condition<br />\nthe intervention.<br />\nSo let&rsquo;s start with determining the types we will need.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "\nval typeConfig = Configuration(\n  \"predicate\" -> MetadataField(URIGraphConf(\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\")),\n  \"trial\" -> MetadataField(URIGraphConf(\"http://schema.org/MedicalTrial\")),\n  \"condition\" -> MetadataField(URIGraphConf(\"http://schema.org/MedicalCondition\")),\n  \"intervention\" -> MetadataField(URIGraphConf(\"http://schema.org/MedicalProcedure\")),\n)\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T22:59:17+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675032745539_172811397",
+      "id": "paragraph_1675032745539_172811397",
+      "dateCreated": "2023-01-29T22:52:25+0000",
+      "dateStarted": "2023-01-29T22:59:17+0000",
+      "dateFinished": "2023-01-29T22:59:17+0000",
+      "status": "ERROR",
+      "$$hashKey": "object:5017"
+    },
+    {
+      "text": "println(typeConfig.yaml)\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:05:15+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675032933063_1196531604",
+      "id": "paragraph_1675032933063_1196531604",
+      "dateCreated": "2023-01-29T22:55:33+0000",
+      "dateStarted": "2023-01-29T22:55:39+0000",
+      "dateFinished": "2023-01-29T22:55:40+0000",
+      "status": "ERROR",
+      "$$hashKey": "object:5019",
+      "title": "Now let's take a look at our graph configurations"
+    },
+    {
+      "text": "%md\nThese will all be entities in our graph, as well as the the predicate we will use to assign the type to them. Notice that these type entities are not from our two data sets. Sometimes, you may be faced with the need for an entity that is not contained data sets. If you are in control of the namespaces, you can just add what you need. However, in our situation we do not control the MeSH namespace. The first step should be to look at the w3 schemas, and schema.org - where we got these.\n\nFor the trials, we will need to construct a URI format that will represent them as entities in the graph. In RDF, we want the URIs to resolve to some page concerning the entity. If you are managing your own namespace, you may need to maintain a large set of entity profile pages or an API that generates them. Here we will use the URL for the clinical trial - http://clinicaltrials.gov/ct2/show/....",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T22:59:50+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675032939701_1889592365",
+      "id": "paragraph_1675032939701_1889592365",
+      "dateCreated": "2023-01-29T22:55:39+0000",
+      "dateStarted": "2023-01-29T22:59:50+0000",
+      "dateFinished": "2023-01-29T22:59:50+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:5020",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>These will all be entities in our graph, as well as the the predicate we will use to assign the type to them. Notice that these type entities are not from our two data sets. Sometimes, you may be faced with the need for an entity that is not contained data sets. If you are in control of the namespaces, you can just add what you need. However, in our situation we do not control the MeSH namespace. The first step should be to look at the w3 schemas, and schema.org - where we got these.</p>\n<p>For the trials, we will need to construct a URI format that will represent them as entities in the graph. In RDF, we want the URIs to resolve to some page concerning the entity. If you are managing your own namespace, you may need to maintain a large set of entity profile pages or an API that generates them. Here we will use the URL for the clinical trial - <a href=\"http://clinicaltrials.gov/ct2/show/\">http://clinicaltrials.gov/ct2/show/</a>&hellip;.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val nctURIConfig = URIGraphConf(ConcatValueConf(Seq(\n  StringValueConf(\"http://clinicaltrials.gov/ct2/show/\"),\n  ColumnValueConf(\"nct_id\")\n)))\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T22:57:02+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033003060_644680782",
+      "id": "paragraph_1675033003060_644680782",
+      "dateCreated": "2023-01-29T22:56:43+0000",
+      "dateStarted": "2023-01-29T22:57:02+0000",
+      "dateFinished": "2023-01-29T22:57:03+0000",
+      "status": "ERROR",
+      "$$hashKey": "object:5021"
+    },
+    {
+      "text": "%md\n\nHere we need to decide what entities we need to match. For us, we know the trials do not occur in MeSH, so we will try and match the conditions and interventions. Neither of which are guaranteed to be in MeSH, on top of the reality that there will certainly missed matches. But dealing with non-matches come later. Now we need to consider what properties we have in the two data sets for the entities. The ideal situation is where there is an explicit and unambiguous identifier shared between the two data sets. That is not the case here. The tables we are working with in the clinical trials data only have names. This means that we need to join to a name in MeSH. In the MeSH graph the main name of an entity is represented with a triple using the rdfs:label predicate. So we know we will be using that predicate in MeSH.\n\nOn the clinical trials side, we need to mark the fields that we will use to match against the property. Both the conditions and interventions tables use the same field name.",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:05:39+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": false,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033022525_2025010422",
+      "id": "paragraph_1675033022525_2025010422",
+      "dateCreated": "2023-01-29T22:57:02+0000",
+      "dateStarted": "2023-01-29T22:59:45+0000",
+      "dateFinished": "2023-01-29T22:59:45+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:5022",
+      "title": "2. Data Fusion",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<h1>2. Data Fusion</h1>\n<p>Here we need to decide what entities we need to match. For us, we know the trials do not occur in MeSH, so we will try and match the conditions and interventions. Neither of which are guaranteed to be in MeSH, on top of the reality that there will certainly missed matches. But dealing with non-matches come later. Now we need to consider what properties we have in the two data sets for the entities. The ideal situation is where there is an explicit and unambiguous identifier shared between the two data sets. That is not the case here. The tables we are working with in the clinical trials data only have names. This means that we need to join to a name in MeSH. In the MeSH graph the main name of an entity is represented with a triple using the rdfs:label predicate. So we know we will be using that predicate in MeSH.</p>\n<p>On the clinical trials side, we need to mark the fields that we will use to match against the property. Both the conditions and interventions tables use the same field name.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val meshConfig = Configuration(\"label_uri\" -> MetadataField(URIGraphConf(\"http://www.w3.org/2000/01/rdf-schema#label\")))\nval nameConfig = LangLiteralGraphConf(ColumnValueConf(\"name\"), StringValueConf(\"en\"))\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T22:57:47+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033051075_1886510400",
+      "id": "paragraph_1675033051075_1886510400",
+      "dateCreated": "2023-01-29T22:57:31+0000",
+      "dateStarted": "2023-01-29T22:57:47+0000",
+      "dateFinished": "2023-01-29T22:57:47+0000",
+      "status": "ERROR",
+      "$$hashKey": "object:5023"
+    },
+    {
+      "text": "%md\n\nAs with the entities, we are not extracting properties from MeSH, as we are fusing data from clinical trials into the MeSH graph.\n\nOf the three types we are extracting, two are being matched into MeSH. This means that they have properties already associated with them. So let's focus on the properties for the trials.\n\nFor each of these properties, we need the following\n\nsource column or a transformation on source data\nthe predicate to represent it\nIn this situation, we are not filling in missing properties for extant entities in MeSH, so our predicates will need to be supplied externally, specifically from schema.org\nThe title of the trial can serve as a rdfs:label, however there are two titles available - official_title and brief_title. We can use brief_title as the label, but we want to keep the proper name as well. We already have the predicate for brief_title defined above from MeSH. The official_title will use the title predicate from schema.org.",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:05:52+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": false,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033067221_391721635",
+      "id": "paragraph_1675033067221_391721635",
+      "dateCreated": "2023-01-29T22:57:47+0000",
+      "dateStarted": "2023-01-29T22:59:47+0000",
+      "dateFinished": "2023-01-29T22:59:47+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:5024",
+      "title": " 3. Property Extraction",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<h1>3. Property Extraction</h1>\n<p>As with the entities, we are not extracting properties from MeSH, as we are fusing data from clinical trials into the MeSH graph.</p>\n<p>Of the three types we are extracting, two are being matched into MeSH. This means that they have properties already associated with them. So let&rsquo;s focus on the properties for the trials.</p>\n<p>For each of these properties, we need the following</p>\n<p>source column or a transformation on source data<br />\nthe predicate to represent it<br />\nIn this situation, we are not filling in missing properties for extant entities in MeSH, so our predicates will need to be supplied externally, specifically from schema.org<br />\nThe title of the trial can serve as a rdfs:label, however there are two titles available - official_title and brief_title. We can use brief_title as the label, but we want to keep the proper name as well. We already have the predicate for brief_title defined above from MeSH. The official_title will use the title predicate from schema.org.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val titleConfig = Configuration(\n  \"predicate\" -> MetadataField(URIGraphConf(\"http://schema.org/title\")),\n  \"official_title\" -> MetadataField(LangLiteralGraphConf(ColumnValueConf(\"official_title\"), StringValueConf(\"en\"))),\n  \"brief_title\" -> MetadataField(LangLiteralGraphConf(ColumnValueConf(\"brief_title\"), StringValueConf(\"en\"))),\n)\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T22:58:32+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033097627_2008185815",
+      "id": "paragraph_1675033097627_2008185815",
+      "dateCreated": "2023-01-29T22:58:17+0000",
+      "dateStarted": "2023-01-29T22:58:32+0000",
+      "dateFinished": "2023-01-29T22:58:32+0000",
+      "status": "ERROR",
+      "$$hashKey": "object:5025"
+    },
+    {
+      "text": "%md\nNow let's do the config for the date of the trial.\n\nThere are many dates to choose from. In this example we will be looking at trends. Since a clinical trial can take a long time, we are more interested in the start date, than the end date. So we will use the study_first_submitted_date. We will also need to transform it into the string format that RDF can use, so we will encode that here. Putting basic transformations is an option, not a necessity. The benefit here is that it keeps us from needing to bloat the main pipeline.",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:00:01+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033112162_895058229",
+      "id": "paragraph_1675033112162_895058229",
+      "dateCreated": "2023-01-29T22:58:32+0000",
+      "dateStarted": "2023-01-29T23:00:01+0000",
+      "dateFinished": "2023-01-29T23:00:01+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:5026",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now let&rsquo;s do the config for the date of the trial.</p>\n<p>There are many dates to choose from. In this example we will be looking at trends. Since a clinical trial can take a long time, we are more interested in the start date, than the end date. So we will use the study_first_submitted_date. We will also need to transform it into the string format that RDF can use, so we will encode that here. Putting basic transformations is an option, not a necessity. The benefit here is that it keeps us from needing to bloat the main pipeline.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "colWidth": 12,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033126910_1344269051",
+      "id": "paragraph_1675033126910_1344269051",
+      "dateCreated": "2023-01-29T22:58:46+0000",
+      "status": "ERROR",
+      "$$hashKey": "object:5027",
+      "dateUpdated": "2023-01-29T23:00:16+0000",
+      "dateFinished": "2023-01-29T23:00:16+0000",
+      "dateStarted": "2023-01-29T23:00:16+0000",
+      "text": "val dateConfig = Configuration(\n      \"predicate\" -> MetadataField(URIGraphConf(\"http://schema.org/startDate\")),\n      \"date\" -> MetadataField(DataLiteralGraphConf(ColumnValueConf(\"DATE_FORMAT(study_first_submitted_date, 'yyyy-MM-dd')\"), \"date\"))\n    )"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033216248_1007166576",
+      "id": "paragraph_1675033216248_1007166576",
+      "dateCreated": "2023-01-29T23:00:16+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:6365",
+      "text": "%md\nThe next step is additional transformations we need before making the graph. This will be use case specific. For this notebook, we mainly are concerned with having fallback values for failed matches.\n\nIf there is a match, then we will store the identified MeSH entity in the column meshid. If not, we need to construct another URI. Unfortunately, we don't have any more clever tricks for making resolvable URIs, specifically, because we have no non-clinical trials identifier. So we will make \"fake\" URI (i.e. one that does not resolve). We will make this with the ID from the clinical trials tables as the local value, and a made up namespace.",
+      "dateUpdated": "2023-01-29T23:03:00+0000",
+      "dateFinished": "2023-01-29T23:03:00+0000",
+      "dateStarted": "2023-01-29T23:03:00+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>The next step is additional transformations we need before making the graph. This will be use case specific. For this notebook, we mainly are concerned with having fallback values for failed matches.</p>\n<p>If there is a match, then we will store the identified MeSH entity in the column meshid. If not, we need to construct another URI. Unfortunately, we don&rsquo;t have any more clever tricks for making resolvable URIs, specifically, because we have no non-clinical trials identifier. So we will make &ldquo;fake&rdquo; URI (i.e. one that does not resolve). We will make this with the ID from the clinical trials tables as the local value, and a made up namespace.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val conditionConfig = Configuration(\n  \"predicate\" -> MetadataField(URIGraphConf(\"http://schema.org/healthCondition\")),\n  \"uri\" -> MetadataField(URIGraphConf(FallbackValueConf(\n    Seq(ColumnValueConf(\"meshid\")),\n    ConcatValueConf(Seq(\n        StringValueConf(\"http://wisecube.com/condition#AACT\"),\n        ColumnValueConf(\"id\"),\n      ))))))\n \nval interventionConfig = Configuration(\n  \"predicate\" -> MetadataField(URIGraphConf(\"http://schema.org/studySubject\")),\n  \"uri\" -> MetadataField(URIGraphConf(FallbackValueConf(\n    Seq(ColumnValueConf(\"meshid\")),\n    ConcatValueConf(\n      Seq(\n        StringValueConf(\"http://wisecube.com/intervention#AACT\"),\n        ColumnValueConf(\"id\"),\n      ))))))\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:03:12+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033380181_905651539",
+      "id": "paragraph_1675033380181_905651539",
+      "dateCreated": "2023-01-29T23:03:00+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:6475",
+      "dateFinished": "2023-01-29T23:03:12+0000",
+      "dateStarted": "2023-01-29T23:03:12+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033392434_40414012",
+      "id": "paragraph_1675033392434_40414012",
+      "dateCreated": "2023-01-29T23:03:12+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:6562",
+      "text": "%md\nFinally, we need to store the information we will use for querying. Primarily, this is used to set a list of default prefixes (namespaces) for use in SPARQL. However, we can also pass other Bellman specific configs. More on this when we get to querying.\n\n",
+      "dateUpdated": "2023-01-29T23:03:33+0000",
+      "dateFinished": "2023-01-29T23:03:33+0000",
+      "dateStarted": "2023-01-29T23:03:33+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Finally, we need to store the information we will use for querying. Primarily, this is used to set a list of default prefixes (namespaces) for use in SPARQL. However, we can also pass other Bellman specific configs. More on this when we get to querying.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val queryConfig = QueryConfig(\n  Prefixes(Map(\n    \"rdf\" -> \"<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\",\n    \"rdfs\" -> \"<http://www.w3.org/2000/01/rdf-schema#>\",\n    \"schema\" -> \"<http://schema.org/>\",\n    \"\" -> \"<http://id.nlm.nih.gov/mesh/>\",\n    \"mv\" -> \"<http://id.nlm.nih.gov/mesh/vocab#>\",\n    \"nct\" -> \"<http://clinicaltrials.gov/ct2/show/>\",\n    \"cond\" -> \"<http://wisecube.com/condition#>\",\n    \"interv\" -> \"<http://wisecube.com/intervention#>\",\n  )), \n  formatRdfOutput = false\n)\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:06:18+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033413073_1707554030",
+      "id": "paragraph_1675033413073_1707554030",
+      "dateCreated": "2023-01-29T23:03:33+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:6674",
+      "dateFinished": "2023-01-29T23:06:19+0000",
+      "dateStarted": "2023-01-29T23:06:18+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mqueryConfig\u001b[0m: \u001b[1m\u001b[32mcom.graphster.orpheus.query.config.QueryConfig\u001b[0m = QueryConfig(Prefixes(Map( -> <http://id.nlm.nih.gov/mesh/>, rdf -> <http://www.w3.org/1999/02/22-rdf-syntax-ns#>, interv -> <http://wisecube.com/intervention#>, schema -> <http://schema.org/>, rdfs -> <http://www.w3.org/2000/01/rdf-schema#>, cond -> <http://wisecube.com/condition#>, mv -> <http://id.nlm.nih.gov/mesh/vocab#>, nct -> <http://clinicaltrials.gov/ct2/show/>)),false,true,false,true)\n"
+          }
+        ]
+      }
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033578118_2059280954",
+      "id": "paragraph_1675033578118_2059280954",
+      "dateCreated": "2023-01-29T23:06:18+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:6974",
+      "text": "%md\nNow that we have created these configs, let's gather them all together, We will namespace them by data set and purpose.\n\n",
+      "dateUpdated": "2023-01-29T23:06:37+0000",
+      "dateFinished": "2023-01-29T23:06:37+0000",
+      "dateStarted": "2023-01-29T23:06:37+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now that we have created these configs, let&rsquo;s gather them all together, We will namespace them by data set and purpose.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val config = Configuration(\n  \"types\" -> MetadataField(typeConfig),\n  \"mesh\" -> MetadataField(meshConfig),\n  \"nct\" -> MetadataField(Configuration(\n    \"name\" -> MetadataField(nameConfig),\n    \"nct_uri\" -> MetadataField(nctURIConfig),\n    \"title\" -> MetadataField(titleConfig),\n    \"date\" -> MetadataField(dateConfig),\n    \"condition\" -> MetadataField(conditionConfig),\n    \"intervention\" -> MetadataField(interventionConfig)\n  )),\n  \"query\" -> MetadataField(queryConfig)\n)",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:06:52+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033597051_942945122",
+      "id": "paragraph_1675033597051_942945122",
+      "dateCreated": "2023-01-29T23:06:37+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:7077",
+      "dateFinished": "2023-01-29T23:06:53+0000",
+      "dateStarted": "2023-01-29T23:06:52+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033612757_249247397",
+      "id": "paragraph_1675033612757_249247397",
+      "dateCreated": "2023-01-29T23:06:52+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:7164",
+      "text": "config.yaml\n",
+      "dateUpdated": "2023-01-29T23:07:10+0000",
+      "dateFinished": "2023-01-29T23:07:10+0000",
+      "dateStarted": "2023-01-29T23:07:10+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "colWidth": 12,
+        "fontSize": 9,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675033630343_2068533070",
+      "id": "paragraph_1675033630343_2068533070",
+      "dateCreated": "2023-01-29T23:07:10+0000",
+      "status": "READY",
+      "focus": true,
+      "$$hashKey": "object:7280"
+    }
+  ],
+  "name": "01_Config",
+  "id": "2HR8T9J3M",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {
+    "isRunning": false
+  },
+  "path": "/graphster/01_Config"
+}

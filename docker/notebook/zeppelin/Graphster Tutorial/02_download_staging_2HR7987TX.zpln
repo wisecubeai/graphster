@@ -1,0 +1,773 @@
+﻿{
+  "paragraphs": [
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036362162_1450921658",
+      "id": "paragraph_1675036362162_1450921658",
+      "dateCreated": "2023-01-29T23:52:42+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:9959",
+      "text": "%md\nWe will stage the data as tables. The MeSH data already comes in a graph format, NTriples. The clinical trials data comes as a collection of pipe-seperated-values files. We will create tables from the MeSH file as well as each clinical trials file",
+      "dateUpdated": "2023-01-29T23:52:51+0000",
+      "dateFinished": "2023-01-29T23:52:51+0000",
+      "dateStarted": "2023-01-29T23:52:51+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>We will stage the data as tables. The MeSH data already comes in a graph format, NTriples. The clinical trials data comes as a collection of pipe-seperated-values files. We will create tables from the MeSH file as well as each clinical trials file</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "import com.graphster.orpheus.config.Configuration\nimport com.graphster.orpheus.data.datasets.{ClinicalTrials, MeSH}\n \nimport java.io.File\nimport spark.implicits",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:53:26+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036371387_1527112143",
+      "id": "paragraph_1675036371387_1527112143",
+      "dateCreated": "2023-01-29T23:52:51+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:10042",
+      "dateFinished": "2023-01-29T23:53:27+0000",
+      "dateStarted": "2023-01-29T23:53:26+0000",
+      "title": "Imports",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import com.graphster.orpheus.config.Configuration\nimport com.graphster.orpheus.data.datasets.{ClinicalTrials, MeSH}\nimport java.io.File\nimport spark.implicits\n"
+          }
+        ]
+      }
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036406558_704692902",
+      "id": "paragraph_1675036406558_704692902",
+      "dateCreated": "2023-01-29T23:53:26+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:10157",
+      "text": "val user=sql(\"select current_user() as user\").collect()(0)(0)\nval dataPath = \"/home/\" + user + \"/data/mesh_kg/\"\nval deltaPath = dataPath + \"delta/\"",
+      "dateUpdated": "2023-01-29T23:53:49+0000",
+      "dateFinished": "2023-01-29T23:53:51+0000",
+      "dateStarted": "2023-01-29T23:53:49+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036429515_42099309",
+      "id": "paragraph_1675036429515_42099309",
+      "dateCreated": "2023-01-29T23:53:49+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:10256",
+      "text": "dbutils.fs.mkdirs(deltaPath)\n",
+      "dateUpdated": "2023-01-29T23:54:17+0000",
+      "dateFinished": "2023-01-29T23:54:17+0000",
+      "dateStarted": "2023-01-29T23:54:17+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036457452_669792968",
+      "id": "paragraph_1675036457452_669792968",
+      "dateCreated": "2023-01-29T23:54:17+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:10360",
+      "dateUpdated": "2023-01-29T23:55:00+0000",
+      "dateFinished": "2023-01-29T23:55:00+0000",
+      "dateStarted": "2023-01-29T23:55:00+0000",
+      "title": "Add MeSH",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now we add MeSH dataset</p>\n\n</div>"
+          }
+        ]
+      },
+      "text": "%md\nNow we add MeSH dataset\n\n"
+    },
+    {
+      "text": "%sql\nCREATE DATABASE IF NOT EXISTS mesh_nct",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:55:41+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "editorHide": false,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036500692_2036167226",
+      "id": "paragraph_1675036500692_2036167226",
+      "dateCreated": "2023-01-29T23:55:00+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:10479",
+      "dateFinished": "2023-01-29T23:55:42+0000",
+      "dateStarted": "2023-01-29T23:55:41+0000",
+      "title": "create mesh schema",
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      }
+    },
+    {
+      "text": "%md\nDownload MeSH data and create a dataframe\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:56:24+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036541084_1915953762",
+      "id": "paragraph_1675036541084_1915953762",
+      "dateCreated": "2023-01-29T23:55:41+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:10584",
+      "dateFinished": "2023-01-29T23:56:24+0000",
+      "dateStarted": "2023-01-29T23:56:24+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Download MeSH data and create a dataframe</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val filepath: String = MeSH.download()\ndbutils.fs.mv(\"file:\" + filepath, dataPath + \"mesh.nt\")\nval meshDF = MeSH.load(dataPath + \"mesh.nt\")\nmeshDF.createOrReplaceTempView(\"allMeshNct\")\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:56:47+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036584386_798387080",
+      "id": "paragraph_1675036584386_798387080",
+      "dateCreated": "2023-01-29T23:56:24+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:10677",
+      "dateFinished": "2023-01-29T23:56:47+0000",
+      "dateStarted": "2023-01-29T23:56:47+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036607500_581556155",
+      "id": "paragraph_1675036607500_581556155",
+      "dateCreated": "2023-01-29T23:56:47+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:10764",
+      "text": "%sql\nCREATE OR REPLACE TABLE\n    mesh_nct.mesh_nct\n    AS (SELECT * from allMeshNct)",
+      "dateUpdated": "2023-01-29T23:57:48+0000",
+      "dateFinished": "2023-01-29T23:57:49+0000",
+      "dateStarted": "2023-01-29T23:57:48+0000",
+      "title": "save mesh data",
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "REPLACE TABLE AS SELECT is only supported with v2 tables."
+          }
+        ]
+      }
+    },
+    {
+      "text": "%sql\nDESCRIBE DATABASE mesh_nct",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:58:21+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "info_name": "string",
+                      "info_value": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036668855_1674807954",
+      "id": "paragraph_1675036668855_1674807954",
+      "dateCreated": "2023-01-29T23:57:48+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:10891",
+      "dateFinished": "2023-01-29T23:58:21+0000",
+      "dateStarted": "2023-01-29T23:58:20+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "info_name\tinfo_value\nDatabase Name\tmesh_nct\nComment\t\nLocation\tfile:/opt/zeppelin/spark-warehouse/mesh_nct.db\nOwner\t\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%sql\nSHOW TABLES In mesh_nct",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:58:36+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "database": "string",
+                      "tableName": "string",
+                      "isTemporary": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036700421_65414098",
+      "id": "paragraph_1675036700421_65414098",
+      "dateCreated": "2023-01-29T23:58:20+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:10993",
+      "dateFinished": "2023-01-29T23:58:36+0000",
+      "dateStarted": "2023-01-29T23:58:36+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "database\ttableName\tisTemporary\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%sql\nselect * from mesh_nct.mesh\nlimit 10",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-29T23:58:56+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036716311_1411242216",
+      "id": "paragraph_1675036716311_1411242216",
+      "dateCreated": "2023-01-29T23:58:36+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:11497",
+      "dateFinished": "2023-01-29T23:58:56+0000",
+      "dateStarted": "2023-01-29T23:58:56+0000",
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table or view not found: mesh_nct.mesh; line 2 pos 14;\n'GlobalLimit 10\n+- 'LocalLimit 10\n   +- 'Project [*]\n      +- 'UnresolvedRelation [mesh_nct, mesh], [], false\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%md \nThe clinical trials data is more complicated. It comes as a set of 50 CSVs (pipe separated). Here we will just loop over each file, and create the table.\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:00:25+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036736219_1836966148",
+      "id": "paragraph_1675036736219_1836966148",
+      "dateCreated": "2023-01-29T23:58:56+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:11973",
+      "dateFinished": "2023-01-30T00:00:25+0000",
+      "dateStarted": "2023-01-30T00:00:25+0000",
+      "title": "Add Clinical Trials",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>The clinical trials data is more complicated. It comes as a set of 50 CSVs (pipe separated). Here we will just loop over each file, and create the table.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "if (!spark.catalog.listTables(\"mesh_nct\").collect().map(_.name).contains(\"conditions\")) {\n  val zipfilePath = ClinicalTrials.download()\n  val directory = ClinicalTrials.unzip(zipfilePath)\n  val dbfsDirectory = dataPath+\"aact\"\n  dbutils.fs.mkdirs(dbfsDirectory)\n  \n  ClinicalTrials.getFiles(directory).foreach(println)\n  ClinicalTrials.getFiles(directory).foreach {\n    filename =>\n      val dbfsPath = s\"$dbfsDirectory/$filename\"\n      if (!dbutils.fs.ls(dbfsDirectory).contains(filename)) {\n        dbutils.fs.cp(s\"file:/databricks/driver/aact/$filename\", dbfsPath)\n      }\n      val tablename = filename.replace(\".txt\", \"\")\n      val df = spark.read.option(\"inferSchema\", true).option(\"delimiter\", \"|\").option(\"header\", true).csv(dbfsPath)\n      if (!spark.catalog.listTables(\"mesh_nct\").collect().map(_.name).contains(tablename)) {\n        df.write.format(\"delta\").saveAsTable(s\"mesh_nct.$tablename\")\n      }\n  }\n}",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:01:06+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036825824_1733213718",
+      "id": "paragraph_1675036825824_1733213718",
+      "dateCreated": "2023-01-30T00:00:25+0000",
+      "status": "READY",
+      "focus": true,
+      "$$hashKey": "object:12082",
+      "title": "download and add clinical trials data"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036951289_156569220",
+      "id": "paragraph_1675036951289_156569220",
+      "dateCreated": "2023-01-30T00:02:31+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:12179",
+      "text": "%md\nWe will be merging in three tables with the MeSH data. The studies table contains details about clinical trials themselves, the conditions table contains information about the condition being studied, and the interventions table which is about the interventions in the trial.",
+      "dateUpdated": "2023-01-30T00:02:48+0000",
+      "dateFinished": "2023-01-30T00:02:48+0000",
+      "dateStarted": "2023-01-30T00:02:48+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>We will be merging in three tables with the MeSH data. The studies table contains details about clinical trials themselves, the conditions table contains information about the condition being studied, and the interventions table which is about the interventions in the trial.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "println(\"mesh triples\", spark.table(\"mesh_nct.mesh\").count())\nprintln(\"NCT studies\", spark.table(\"mesh_nct.studies\").count())\nprintln(\"NCT conditions\", spark.table(\"mesh_nct.conditions\").count())\nprintln(\"NCT interventions\", spark.table(\"mesh_nct.interventions\").count())",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:03:04+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036968027_630386513",
+      "id": "paragraph_1675036968027_630386513",
+      "dateCreated": "2023-01-30T00:02:48+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:12260",
+      "dateFinished": "2023-01-30T00:03:05+0000",
+      "dateStarted": "2023-01-30T00:03:04+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675036984683_105166794",
+      "id": "paragraph_1675036984683_105166794",
+      "dateCreated": "2023-01-30T00:03:04+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:12347",
+      "text": "%sql\nselect * from mesh_nct.studies\nlimit 10",
+      "dateUpdated": "2023-01-30T00:03:32+0000",
+      "dateFinished": "2023-01-30T00:03:32+0000",
+      "dateStarted": "2023-01-30T00:03:32+0000"
+    }
+  ],
+  "name": "02_download_staging",
+  "id": "2HR7987TX",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {},
+  "path": "/graphster/02_download_staging"
+}

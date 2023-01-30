@@ -1,0 +1,948 @@
+﻿{
+  "paragraphs": [
+    {
+      "title": "Creating a Knowledge Graph from MeSH and Clinical Trials",
+      "text": "%md\nNow we are ready to create the KG by fusing clinical trials data and MeSH. In this notebook, we will use the transformers in the graphster library to enrich and fuse the data sets.\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:09:24+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now we are ready to create the KG by fusing clinical trials data and MeSH. In this notebook, we will use the transformers in the graphster library to enrich and fuse the data sets.</p>\n\n</div>"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037337303_632225436",
+      "id": "paragraph_1675037337303_632225436",
+      "dateCreated": "2023-01-30T00:08:57+0000",
+      "dateStarted": "2023-01-30T00:09:24+0000",
+      "dateFinished": "2023-01-30T00:09:24+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:14520"
+    },
+    {
+      "title": "Imports",
+      "text": "import com.graphster.orpheus.config.Configuration\nimport com.graphster.orpheus.data.datasets.{ClinicalTrials, MeSH}\nimport com.graphster.orpheus.enrichment.GraphLinker\nimport com.graphster.orpheus.fusion.{TripleExtractor, TripleMarker}\nimport org.apache.spark.ml.Pipeline\nimport org.apache.spark.ml.feature.SQLTransformer\n \nimport scala.language.postfixOps\n \nimport spark.implicits\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:09:58+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import com.graphster.orpheus.config.Configuration\nimport com.graphster.orpheus.data.datasets.{ClinicalTrials, MeSH}\nimport com.graphster.orpheus.enrichment.GraphLinker\nimport com.graphster.orpheus.fusion.{TripleExtractor, TripleMarker}\nimport org.apache.spark.ml.Pipeline\nimport org.apache.spark.ml.feature.SQLTransformer\nimport scala.language.postfixOps\nimport spark.implicits\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037364757_774017802",
+      "id": "paragraph_1675037364757_774017802",
+      "dateCreated": "2023-01-30T00:09:24+0000",
+      "dateStarted": "2023-01-30T00:09:58+0000",
+      "dateFinished": "2023-01-30T00:10:00+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:14521"
+    },
+    {
+      "text": "%sql\nDESCRIBE DATABASE mesh_nct",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:10:17+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "info_name": "string",
+                      "info_value": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "info_name\tinfo_value\nDatabase Name\tmesh_nct\nComment\t\nLocation\tfile:/opt/zeppelin/spark-warehouse/mesh_nct.db\nOwner\t\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037396271_647362666",
+      "id": "paragraph_1675037396271_647362666",
+      "dateCreated": "2023-01-30T00:09:56+0000",
+      "dateStarted": "2023-01-30T00:10:17+0000",
+      "dateFinished": "2023-01-30T00:10:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:14522"
+    },
+    {
+      "text": "%md\nNow let's take a look at the number of triples in the graph before enrichment\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:14:05+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037417533_474380625",
+      "id": "paragraph_1675037417533_474380625",
+      "dateCreated": "2023-01-30T00:10:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:14523",
+      "dateFinished": "2023-01-30T00:14:05+0000",
+      "dateStarted": "2023-01-30T00:14:05+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now let&rsquo;s take a look at the number of triples in the graph before enrichment</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "title": "count of triples before enrichment",
+      "text": "%sql\nselect count(*) from mesh_nct.mesh_nct\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:11:03+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table or view not found: mesh_nct.mesh_nct; line 2 pos 21;\n'Aggregate [unresolvedalias(count(1), None)]\n+- 'UnresolvedRelation [mesh_nct, mesh_nct], [], false\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037438510_1892773402",
+      "id": "paragraph_1675037438510_1892773402",
+      "dateCreated": "2023-01-30T00:10:38+0000",
+      "dateStarted": "2023-01-30T00:11:03+0000",
+      "dateFinished": "2023-01-30T00:11:03+0000",
+      "status": "ERROR",
+      "$$hashKey": "object:14524"
+    },
+    {
+      "title": "1. Enrichment & Fusion",
+      "text": "%md\nIn order to turn data into knowledge, we need to add meaning, semantics. The data stored in a table does not have an automatic interpretation. Column names, and documentation can add this meaning, but these do not let us combine the knowledge that the table was built from, with other data. In order to synthesize new knowledge and create insights, we need to establish common elements between data sets. Storing this data in a single common schema allows researchers to speak a common language between different data sources with a shared understanding and semantics. Unfortunately, this semantic layer is often ignored in modern data lakes and is usually an afterthought.\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:11:34+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>In order to turn data into knowledge, we need to add meaning, semantics. The data stored in a table does not have an automatic interpretation. Column names, and documentation can add this meaning, but these do not let us combine the knowledge that the table was built from, with other data. In order to synthesize new knowledge and create insights, we need to establish common elements between data sets. Storing this data in a single common schema allows researchers to speak a common language between different data sources with a shared understanding and semantics. Unfortunately, this semantic layer is often ignored in modern data lakes and is usually an afterthought.</p>\n\n</div>"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037463508_554621714",
+      "id": "paragraph_1675037463508_554621714",
+      "dateCreated": "2023-01-30T00:11:03+0000",
+      "dateStarted": "2023-01-30T00:11:20+0000",
+      "dateFinished": "2023-01-30T00:11:20+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:14525"
+    },
+    {
+      "text": "%md\nFirst let's run config notebook to get the config\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:14:19+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>First let&rsquo;s run config notebook to get the config</p>\n\n</div>"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037480570_1244256356",
+      "id": "paragraph_1675037480570_1244256356",
+      "dateCreated": "2023-01-30T00:11:20+0000",
+      "dateStarted": "2023-01-30T00:14:19+0000",
+      "dateFinished": "2023-01-30T00:14:19+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:14526"
+    },
+    {
+      "text": "z.runNote(\"2HR8T9J3M\")\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:13:52+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037514044_460339970",
+      "id": "paragraph_1675037514044_460339970",
+      "dateCreated": "2023-01-30T00:11:54+0000",
+      "dateStarted": "2023-01-30T00:13:52+0000",
+      "dateFinished": "2023-01-30T00:13:52+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:14527"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037632458_1229889534",
+      "id": "paragraph_1675037632458_1229889534",
+      "dateCreated": "2023-01-30T00:13:52+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:14528",
+      "text": "%md\nWe will be merging in three tables with the MeSH data. The studies table contains details about clinical trials themselves, the conditions table contains information about the condition being studied, and the interventions table which is about the interventions in the trial.\n\nLet's load these files that we will be transforming.",
+      "dateUpdated": "2023-01-30T00:14:43+0000",
+      "dateFinished": "2023-01-30T00:14:43+0000",
+      "dateStarted": "2023-01-30T00:14:43+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>We will be merging in three tables with the MeSH data. The studies table contains details about clinical trials themselves, the conditions table contains information about the condition being studied, and the interventions table which is about the interventions in the trial.</p>\n<p>Let&rsquo;s load these files that we will be transforming.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val studiesDF = spark.table(\"mesh_nct.studies\")\nval conditionsDF = spark.table(\"mesh_nct.conditions\")\nval interventionsDF = spark.table(\"mesh_nct.interventions\")\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:15:03+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037683810_795615874",
+      "id": "paragraph_1675037683810_795615874",
+      "dateCreated": "2023-01-30T00:14:43+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:15672",
+      "dateFinished": "2023-01-30T00:15:03+0000",
+      "dateStarted": "2023-01-30T00:15:03+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037703178_597353129",
+      "id": "paragraph_1675037703178_597353129",
+      "dateCreated": "2023-01-30T00:15:03+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:15774",
+      "dateUpdated": "2023-01-30T00:18:04+0000",
+      "dateFinished": "2023-01-30T00:18:04+0000",
+      "dateStarted": "2023-01-30T00:18:04+0000",
+      "title": "2. Transform Studies",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now we build a pipeline to transform the studies table into a set of triples.</p>\n<p>removeUntitled - remove the trials with blank titles<br />\nnctType - define the triple that assigns the type to the trial entities<br />\nnctFirstDate - define the triple for the property that represents the trial submission date<br />\nnctBriefTitle - define the triple that assigns the label (brief title)<br />\nnctOfficialTitle - define the triple for the property that represents the trial official title</p>\n\n</div>"
+          }
+        ]
+      },
+      "text": "%md\nNow we build a pipeline to transform the studies table into a set of triples.\n\nremoveUntitled - remove the trials with blank titles\nnctType - define the triple that assigns the type to the trial entities\nnctFirstDate - define the triple for the property that represents the trial submission date\nnctBriefTitle - define the triple that assigns the label (brief title)\nnctOfficialTitle - define the triple for the property that represents the trial official title"
+    },
+    {
+      "text": "// First we will remove the trials that are missing titles.\nval removeUntitled = new SQLTransformer().setStatement(\n  s\"\"\"\n    |SELECT *\n    |FROM __THIS__\n    |WHERE ${config / \"nct\" / \"title\" / \"brief_title\" / \"lex\" / \"column\" getString} IS NOT NULL\n    |AND ${config / \"nct\" / \"title\" / \"official_title\" / \"lex\" / \"column\" getString} IS NOT NULL\n    |\"\"\".stripMargin\n)\n \n// This is the transformer that marks a column with metadata that define a triple that can be extract from the table\nval nctType = new TripleMarker()\n  .setInputCol(\"nct_id\") // column to be marked\n  .setTripleMeta(\n    \"nct_type\", // name\n    config / \"nct\" / \"nct_uri\" getConf, // SUBJECT\n    config / \"types\" / \"predicate\" getConf, // PREDICATE\n    config / \"types\" / \"trial\" getConf // OBJECT\n  )\n \nval nctFirstDate = new TripleMarker()\n  .setInputCol(\"nct_id\") // column to be marked\n  .setTripleMeta(\n    \"nct_date\", // name\n    config / \"nct\" / \"nct_uri\" getConf, // SUBJECT\n    config / \"nct\" / \"date\" / \"predicate\" getConf, // PREDICATE\n    config / \"nct\" / \"date\" / \"date\" getConf // OBJECT\n  )\n \nval nctBriefTitle = new TripleMarker()\n  .setInputCol(\"nct_id\") // column to be marked\n  .setTripleMeta(\n    \"nct_label\", // name\n    config / \"nct\" / \"nct_uri\" getConf, // SUBJECT\n    config / \"mesh\" / \"label_uri\" getConf, // PREDICATE\n    config / \"nct\" / \"title\" / \"brief_title\" getConf // OBJECT\n  )\n \nval nctOfficialTitle = new TripleMarker()\n  .setInputCol(\"nct_id\") // column to be marked\n  .setTripleMeta(\n    \"nct_title\", // name\n    config / \"nct\" / \"nct_uri\" getConf, // SUBJECT\n    config / \"nct\" / \"title\" / \"predicate\" getConf, // PREDICATE\n    config / \"nct\" / \"title\" / \"official_title\" getConf // OBJECT\n  )\n \nval nctPipeline = new Pipeline().setStages(Array(\n  removeUntitled,\n  nctType,\n  nctFirstDate,\n  nctBriefTitle,\n  nctOfficialTitle,\n  new TripleExtractor() // This is the transformer that looks in the metadata for triples and extracts them all from the dataset\n)).fit(studiesDF)",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:18:48+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037884094_1914902555",
+      "id": "paragraph_1675037884094_1914902555",
+      "dateCreated": "2023-01-30T00:18:04+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:15978",
+      "dateFinished": "2023-01-30T00:18:48+0000",
+      "dateStarted": "2023-01-30T00:18:48+0000",
+      "title": "build the pipeline"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037928257_321273706",
+      "id": "paragraph_1675037928257_321273706",
+      "dateCreated": "2023-01-30T00:18:48+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:16078",
+      "text": "%md\nWe perform similar extraction the conditions and interventions tables.\n\ncondRemoveUnamed - remove the conditions without names\ncondLinker - link the condition into the MeSH graph using the name column and the rdfs:label property\ncondType - define the triple that assigns the type to the condition\ncondLabel - define the triple that assigns the label\ncondPred - define the triple representing the relationship between the trial and the condition",
+      "dateUpdated": "2023-01-30T00:20:04+0000",
+      "dateFinished": "2023-01-30T00:20:04+0000",
+      "dateStarted": "2023-01-30T00:20:04+0000",
+      "title": "3. Transform Conditions and Interventions",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>We perform similar extraction the conditions and interventions tables.</p>\n<p>condRemoveUnamed - remove the conditions without names<br />\ncondLinker - link the condition into the MeSH graph using the name column and the rdfs:label property<br />\ncondType - define the triple that assigns the type to the condition<br />\ncondLabel - define the triple that assigns the label<br />\ncondPred - define the triple representing the relationship between the trial and the condition</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val condRemoveUnamed = new SQLTransformer().setStatement(\n  s\"\"\"\n    |SELECT *\n    |FROM __THIS__\n    |WHERE ${config / \"nct\" / \"name\" / \"lex\" / \"column\" getString} IS NOT NULL\n    |\"\"\".stripMargin)\n \nval condLinker = new GraphLinker()\n  .setPropertyCol(config / \"nct\" / \"name\" / \"lex\" / \"column\" getString)\n  .setPredicateCol(config / \"mesh\" / \"label_uri\" / \"uri\" / \"value\" getString)\n  .setReferenceTable(\"mesh_nct.mesh\")\n  .setTransformation(\"LOWER($)\")\n  .setJoinType(\"leftouter\")\n  .setOutputCol(\"meshid\")\n \nval condType = new TripleMarker()\n  .setInputCol(config / \"nct\" / \"name\" / \"lex\" / \"column\" getString)\n  .setTripleMeta(\n    \"condition_type\",\n    config / \"nct\" / \"condition\" / \"uri\" getConf,\n    config / \"types\" / \"predicate\" getConf,\n    config / \"types\" / \"condition\" getConf\n  )\n \nval condLabel = new TripleMarker()\n  .setInputCol(config / \"nct\" / \"name\" / \"lex\" / \"column\" getString)\n  .setTripleMeta(\n    \"condition_label\",\n    config / \"nct\" / \"condition\" / \"uri\" getConf,\n    config / \"mesh\" / \"label_uri\" getConf,\n    config / \"nct\" / \"name\" getConf\n  )\n \nval condPred = new TripleMarker()\n  .setInputCol(\"nct_id\")\n  .setTripleMeta(\n    \"condition\",\n    config / \"nct\" / \"nct_uri\" getConf,\n    config / \"nct\" / \"condition\" / \"predicate\" getConf,\n    config / \"nct\" / \"condition\" / \"uri\" getConf,\n  )\n \nval conditionPipeline = new Pipeline().setStages(Array(\n  condRemoveUnamed,\n  condLinker,\n  condPred,\n  condType,\n  condLabel,\n  new TripleExtractor()\n)).fit(conditionsDF)\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:20:41+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675037971761_223044780",
+      "id": "paragraph_1675037971761_223044780",
+      "dateCreated": "2023-01-30T00:19:31+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:16184",
+      "dateFinished": "2023-01-30T00:20:41+0000",
+      "dateStarted": "2023-01-30T00:20:41+0000",
+      "title": "conditions transformer"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038041174_479038629",
+      "id": "paragraph_1675038041174_479038629",
+      "dateCreated": "2023-01-30T00:20:41+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:16327",
+      "text": "val intervRemoveUnamed = new SQLTransformer().setStatement(\n  s\"\"\"\n    |SELECT *\n    |FROM __THIS__\n    |WHERE ${config / \"nct\" / \"name\" / \"lex\" / \"column\" getString} IS NOT NULL\n    |\"\"\".stripMargin)\n \nval intervLinker = new GraphLinker()\n  .setPropertyCol(config / \"nct\" / \"name\" / \"lex\" / \"column\" getString)\n  .setPredicateCol(config / \"mesh\" / \"label_uri\" / \"uri\" / \"value\" getString)\n  .setReferenceTable(\"mesh_nct.mesh\")\n  .setTransformation(\"LOWER($)\")\n  .setJoinType(\"leftouter\")\n  .setOutputCol(\"meshid\")\n \nval intervType = new TripleMarker()\n  .setInputCol(config / \"nct\" / \"name\" / \"lex\" / \"column\" getString)\n  .setTripleMeta(\n    \"intervention_type\",\n    config / \"nct\" / \"intervention\" / \"uri\" getConf,\n    config / \"types\" / \"predicate\" getConf,\n    config / \"types\" / \"intervention\" getConf\n  )\n \nval intervLabel = new TripleMarker()\n  .setInputCol(config / \"nct\" / \"name\" / \"lex\" / \"column\" getString)\n  .setTripleMeta(\n    \"intervention_label\",\n    config / \"nct\" / \"intervention\" / \"uri\" getConf,\n    config / \"mesh\" / \"label_uri\" getConf,\n    config / \"nct\" / \"name\" getConf\n  )\n \nval intervPred = new TripleMarker()\n  .setInputCol(\"nct_id\")\n  .setTripleMeta(\n    \"condition\",\n    config / \"nct\" / \"nct_uri\" getConf,\n    config / \"nct\" / \"intervention\" / \"predicate\" getConf,\n    config / \"nct\" / \"intervention\" / \"uri\" getConf,\n  )\n \nval interventionPipeline = new Pipeline().setStages(Array(\n  intervRemoveUnamed,\n  intervLinker,\n  intervPred,\n  intervType,\n  intervLabel,\n  new TripleExtractor()\n)).fit(interventionsDF)",
+      "dateUpdated": "2023-01-30T00:21:43+0000",
+      "dateFinished": "2023-01-30T00:21:43+0000",
+      "dateStarted": "2023-01-30T00:21:43+0000",
+      "title": "Interventions transformer"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038103724_1352256319",
+      "id": "paragraph_1675038103724_1352256319",
+      "dateCreated": "2023-01-30T00:21:43+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:16449",
+      "text": "val studyTriples = nctPipeline.transform(studiesDF).distinct()\nval conditionTriples = conditionPipeline.transform(conditionsDF).distinct()\nval interventionTriples = interventionPipeline.transform(interventionsDF).distinct()\nval nctTriples = studyTriples.unionAll(conditionTriples).unionAll(interventionTriples).distinct()\nval graph = spark.table(\"mesh_nct.mesh\").unionAll(nctTriples).distinct()",
+      "dateUpdated": "2023-01-30T00:22:24+0000",
+      "dateFinished": "2023-01-30T00:22:25+0000",
+      "dateStarted": "2023-01-30T00:22:24+0000",
+      "title": "4. Build the Graph"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038144971_1811090153",
+      "id": "paragraph_1675038144971_1811090153",
+      "dateCreated": "2023-01-30T00:22:24+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:16570",
+      "text": "%md\nNow we have a graph that is the result of fusing MeSH with extracted data from clinical trials. These conditions and interventions in clinical trials, which were just strings associated to trial, now are connected to the millions of facts available in MeSH. Similarly, the knowledge already present in the MeSH knowledge graph, mainly hierarchical and type relationship, is now connected to real world facts.\n\nLet's look at how many facts we found with this relatively simple set of pipelines.",
+      "dateUpdated": "2023-01-30T00:22:54+0000",
+      "dateFinished": "2023-01-30T00:22:54+0000",
+      "dateStarted": "2023-01-30T00:22:54+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now we have a graph that is the result of fusing MeSH with extracted data from clinical trials. These conditions and interventions in clinical trials, which were just strings associated to trial, now are connected to the millions of facts available in MeSH. Similarly, the knowledge already present in the MeSH knowledge graph, mainly hierarchical and type relationship, is now connected to real world facts.</p>\n<p>Let&rsquo;s look at how many facts we found with this relatively simple set of pipelines.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "println(\"Number of NCT study triples\", studyTriples.count())\nprintln(\"Number of NCT condition triples\", conditionTriples.count())\nprintln(\"Number of NCT intervention triples\", interventionTriples.count())\nprintln(\"Number of NCT triples\", nctTriples.count())\nprintln(\"Number of MeSH triples\", spark.table(\"mesh_nct.mesh\").count())\nprintln(\"Number of total triples\", graph.count())",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:23:07+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038174852_1924269519",
+      "id": "paragraph_1675038174852_1924269519",
+      "dateCreated": "2023-01-30T00:22:54+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:16668",
+      "dateFinished": "2023-01-30T00:23:07+0000",
+      "dateStarted": "2023-01-30T00:23:07+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038187754_758661699",
+      "id": "paragraph_1675038187754_758661699",
+      "dateCreated": "2023-01-30T00:23:07+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:16755",
+      "text": "%md\nWe have added 5.5 million triples into the MeSH graph! Now, let us save this so we can begin querying.\n\n",
+      "dateUpdated": "2023-01-30T00:23:28+0000",
+      "dateFinished": "2023-01-30T00:23:28+0000",
+      "dateStarted": "2023-01-30T00:23:28+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>We have added 5.5 million triples into the MeSH graph! Now, let us save this so we can begin querying.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "graph.createOrReplaceTempView(\"allMeshNct\")\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:23:41+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038208767_11656979",
+      "id": "paragraph_1675038208767_11656979",
+      "dateCreated": "2023-01-30T00:23:28+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:16862",
+      "dateFinished": "2023-01-30T00:23:41+0000",
+      "dateStarted": "2023-01-30T00:23:41+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038221078_2142433555",
+      "id": "paragraph_1675038221078_2142433555",
+      "dateCreated": "2023-01-30T00:23:41+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:16955",
+      "text": "%sql\nCREATE OR REPLACE TABLE\n    mesh_nct.mesh_nct\n    AS (SELECT * from allMeshNct)",
+      "dateUpdated": "2023-01-30T00:24:20+0000",
+      "dateFinished": "2023-01-30T00:24:01+0000",
+      "dateStarted": "2023-01-30T00:24:01+0000",
+      "title": "Add the enriched data to database",
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "REPLACE TABLE AS SELECT is only supported with v2 tables."
+          }
+        ]
+      }
+    },
+    {
+      "text": "%sql\nselect count(*) from mesh_nct.mesh_nct\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:24:34+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038241089_101227072",
+      "id": "paragraph_1675038241089_101227072",
+      "dateCreated": "2023-01-30T00:24:01+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:17056",
+      "dateFinished": "2023-01-30T00:24:34+0000",
+      "dateStarted": "2023-01-30T00:24:34+0000"
+    }
+  ],
+  "name": "03_enrichment_fusion",
+  "id": "2HQFGKN4W",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {},
+  "path": "/graphster/03_enrichment_fusion"
+}

@@ -1,0 +1,928 @@
+﻿{
+  "paragraphs": [
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038449005_2129307895",
+      "id": "paragraph_1675038449005_2129307895",
+      "dateCreated": "2023-01-30T00:27:29+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:17677",
+      "text": "%md\n# Creating a Knowledge Graph from MeSH and Clinical Trials\n",
+      "dateUpdated": "2023-01-30T00:28:06+0000",
+      "dateFinished": "2023-01-30T00:28:06+0000",
+      "dateStarted": "2023-01-30T00:28:06+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<h1>Creating a Knowledge Graph from MeSH and Clinical Trials</h1>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "import com.graphster.orpheus.config.Configuration\nimport com.graphster.orpheus.config.graph.NodeConf\nimport com.graphster.orpheus.query.Query.implicits._\nimport org.apache.spark.sql.{functions => sf}\nimport org.apache.spark.sql.expressions.Window\nimport scala.language.postfixOps\nimport spark.implicits\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:28:34+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038486388_712536881",
+      "id": "paragraph_1675038486388_712536881",
+      "dateCreated": "2023-01-30T00:28:06+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:17757",
+      "dateFinished": "2023-01-30T00:28:36+0000",
+      "dateStarted": "2023-01-30T00:28:34+0000",
+      "title": "Imports",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import com.graphster.orpheus.config.Configuration\nimport com.graphster.orpheus.config.graph.NodeConf\nimport com.graphster.orpheus.query.Query.implicits._\nimport org.apache.spark.sql.{functions=>sf}\nimport org.apache.spark.sql.expressions.Window\nimport scala.language.postfixOps\nimport spark.implicits\n"
+          }
+        ]
+      }
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038500544_626758129",
+      "id": "paragraph_1675038500544_626758129",
+      "dateCreated": "2023-01-30T00:28:20+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:17850",
+      "text": "z.runNote(\"2HR8T9J3M\")",
+      "dateUpdated": "2023-01-30T00:29:31+0000",
+      "dateFinished": "2023-01-30T00:29:32+0000",
+      "dateStarted": "2023-01-30T00:29:31+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      }
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038571839_1807786308",
+      "id": "paragraph_1675038571839_1807786308",
+      "dateCreated": "2023-01-30T00:29:31+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:17996",
+      "text": "%md\nBy integrating biomedical data in an connected manner helps in quick retrieval of hidden insights. These semantic networks also help reduce errors and increase chances of making a discovery in a cost-effective manner. For uncovering hidden correlations between medical data, analysts use different techniques like link prediction. By visually exploring these correlations between medical entities, scientists can make timely decisions on sensitive treatment options.\n\nIn this notebook we will query our graph on Spark, using the query module. This module is powered by the Bellman library from GSK.\nFirst, we will transform the graph into the format that Bellman requires for querying.\n",
+      "dateUpdated": "2023-01-30T00:30:43+0000",
+      "dateFinished": "2023-01-30T00:30:43+0000",
+      "dateStarted": "2023-01-30T00:30:43+0000",
+      "title": "Querying & Derived Graph",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>By integrating biomedical data in an connected manner helps in quick retrieval of hidden insights. These semantic networks also help reduce errors and increase chances of making a discovery in a cost-effective manner. For uncovering hidden correlations between medical data, analysts use different techniques like link prediction. By visually exploring these correlations between medical entities, scientists can make timely decisions on sensitive treatment options.</p>\n<p>In this notebook we will query our graph on Spark, using the query module. This module is powered by the Bellman library from GSK.<br />\nFirst, we will transform the graph into the format that Bellman requires for querying.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val triples = spark.table(\"mesh_nct.mesh_nct\")\n  .select(\n    NodeConf.row2string($\"subject\").as(\"s\"),\n    NodeConf.row2string($\"predicate\").as(\"p\"),\n    NodeConf.row2string($\"object\").as(\"o\"),\n  ).persist()\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:31:35+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038643724_1739452995",
+      "id": "paragraph_1675038643724_1739452995",
+      "dateCreated": "2023-01-30T00:30:43+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:18105",
+      "dateFinished": "2023-01-30T00:31:35+0000",
+      "dateStarted": "2023-01-30T00:31:35+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038695049_1216140668",
+      "id": "paragraph_1675038695049_1216140668",
+      "dateCreated": "2023-01-30T00:31:35+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:18192",
+      "text": "display(triples)\n",
+      "dateUpdated": "2023-01-30T00:31:54+0000",
+      "dateFinished": "2023-01-30T00:31:54+0000",
+      "dateStarted": "2023-01-30T00:31:54+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038714610_249400268",
+      "id": "paragraph_1675038714610_249400268",
+      "dateCreated": "2023-01-30T00:31:54+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:18298",
+      "text": "val queryConfig = QueryConfig(config / \"query\" getConf)\n",
+      "dateUpdated": "2023-01-30T00:32:06+0000",
+      "dateFinished": "2023-01-30T00:32:06+0000",
+      "dateStarted": "2023-01-30T00:32:06+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038726084_1338133262",
+      "id": "paragraph_1675038726084_1338133262",
+      "dateCreated": "2023-01-30T00:32:06+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:18393",
+      "text": "%md\nNow let's find analyses in the graph, corresponding to This query below finds all trials for brain diseases, MeSH ui: D001927 and group by the type of brain disease and the intervention used.\n\n",
+      "dateUpdated": "2023-01-30T00:32:46+0000",
+      "dateFinished": "2023-01-30T00:32:26+0000",
+      "dateStarted": "2023-01-30T00:32:26+0000",
+      "title": "Brain Diseases",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now let&rsquo;s find analyses in the graph, corresponding to This query below finds all trials for brain diseases, MeSH ui: D001927 and group by the type of brain disease and the intervention used.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val query = \"\"\"\n    |SELECT ?cond ?condLabel ?interv ?intervLabel (COUNT(?trial) AS ?numTrials)\n    |WHERE {\n    | ?cond mv:broaderDescriptor :D001927 .      # get all immediate children of brain disease\n    | ?trial rdf:type schema:MedicalTrial .      # get all clinical trials\n    | ?trial schema:healthCondition ?c .         # get the condition being studied\n    | ?trial schema:studySubject ?interv .       # get the intervention being studied\n    | ?c rdf:type mv:TopicalDescriptor .         # limit to conditions that were linked to MeSH, and to the descriptor matches\n    | ?c mv:broaderDescriptor* ?cond .           # limit to conditions that sub types of some immediate child of brain disease\n    | ?cond rdfs:label ?condLabel .              # get the label for the immediate child of brain disease\n    | ?interv rdf:type mv:TopicalDescriptor .    # limit to interventions that were linked to MeSH, and to the descriptor matches\n    | ?interv rdfs:label ?intervLabel .          # get the label for the intervention\n    |}\n    |GROUP BY ?cond ?condLabel ?interv ?intervLabel # group by the immediate child of brain disease and the intervention\n    |\"\"\".stripMargin\n \nval results = triples.sparql(queryConfig, query).convertResults(Map(\"numTrials\" -> \"int\"))\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:33:02+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038746648_1373880537",
+      "id": "paragraph_1675038746648_1373880537",
+      "dateCreated": "2023-01-30T00:32:26+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:18487",
+      "dateFinished": "2023-01-30T00:33:02+0000",
+      "dateStarted": "2023-01-30T00:33:02+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038782509_1087630256",
+      "id": "paragraph_1675038782509_1087630256",
+      "dateCreated": "2023-01-30T00:33:02+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:18599",
+      "text": "results.createOrReplaceTempView(\"brainDiseasesResults\")\n",
+      "dateUpdated": "2023-01-30T00:33:34+0000",
+      "dateFinished": "2023-01-30T00:33:34+0000",
+      "dateStarted": "2023-01-30T00:33:34+0000"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038814611_1720887700",
+      "id": "paragraph_1675038814611_1720887700",
+      "dateCreated": "2023-01-30T00:33:34+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:18697",
+      "text": "%sql\nCREATE OR REPLACE TABLE\n    mesh_nct.brain_diseases\n    AS (SELECT * from brainDiseasesResults)",
+      "dateUpdated": "2023-01-30T00:33:49+0000",
+      "dateFinished": "2023-01-30T00:33:50+0000",
+      "dateStarted": "2023-01-30T00:33:49+0000",
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "REPLACE TABLE AS SELECT is only supported with v2 tables."
+          }
+        ]
+      }
+    },
+    {
+      "text": "%sql\nselect count(*) from mesh_nct.brain_diseases\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:34:04+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038829980_1683969912",
+      "id": "paragraph_1675038829980_1683969912",
+      "dateCreated": "2023-01-30T00:33:49+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:18810",
+      "dateFinished": "2023-01-30T00:34:04+0000",
+      "dateStarted": "2023-01-30T00:34:04+0000",
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table or view not found: mesh_nct.brain_diseases; line 2 pos 21;\n'Aggregate [unresolvedalias(count(1), None)]\n+- 'UnresolvedRelation [mesh_nct, brain_diseases], [], false\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%md\nNow first, let's take a look at the Brain Diseases sub-graph we synthesized from our fused graph. Since this is small graph, we will visualize this using the Python library networkx. One of the great benefits of doing all this on Spark, is that we can easily share information between scala (JVM) and Python, and even R.\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:34:38+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038844708_942859787",
+      "id": "paragraph_1675038844708_942859787",
+      "dateCreated": "2023-01-30T00:34:04+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:18909",
+      "dateFinished": "2023-01-30T00:34:38+0000",
+      "dateStarted": "2023-01-30T00:34:38+0000",
+      "title": "Analysis and Data Visualization",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now first, let&rsquo;s take a look at the Brain Diseases sub-graph we synthesized from our fused graph. Since this is small graph, we will visualize this using the Python library networkx. One of the great benefits of doing all this on Spark, is that we can easily share information between scala (JVM) and Python, and even R.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%python\nfrom matplotlib import pyplot as plt\nimport networkx as nx\nimport pandas as pd\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:35:43+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038860389_1131529733",
+      "id": "paragraph_1675038860389_1131529733",
+      "dateCreated": "2023-01-30T00:34:20+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:19003",
+      "dateFinished": "2023-01-30T00:35:28+0000",
+      "dateStarted": "2023-01-30T00:35:27+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      }
+    },
+    {
+      "text": "%python\nimport plotly.express as px\ntop_100_conditions_pdf = sql(\"\"\"\n    SELECT cond, lower(condLabel) as condLabel, sum(numTrials) as sum_trials from mesh_nct.brain_diseases\n        group by 1,2\n        order by 3 desc\n        limit 100\n\"\"\").toPandas()\nfig = px.bar(top_100_conditions_pdf[:10], x='condLabel', y='sum_trials')\nfig.show()\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:42:44+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038890487_143156173",
+      "id": "paragraph_1675038890487_143156173",
+      "dateCreated": "2023-01-30T00:34:50+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:19143",
+      "dateFinished": "2023-01-30T00:36:01+0000",
+      "dateStarted": "2023-01-30T00:36:00+0000",
+      "title": "Top 10 conditions",
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Interpreter py not found"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%python\ntop_100_interventions_pdf = sql(\"\"\"\n    SELECT interv, lower(intervLabel) as intervLabel, sum(numTrials) as sum_trials from mesh_nct.brain_diseases\n        group by 1,2\n        order by 3 desc\n        limit 100\n\"\"\").toPandas()\nfig = px.bar(top_100_interventions_pdf[:10], x='intervLabel', y='sum_trials')\nfig.show()",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:38:23+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675038960298_121829750",
+      "id": "paragraph_1675038960298_121829750",
+      "dateCreated": "2023-01-30T00:36:00+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:19275",
+      "dateFinished": "2023-01-30T00:38:23+0000",
+      "dateStarted": "2023-01-30T00:38:23+0000",
+      "title": "Top 10 Interventions"
+    },
+    {
+      "text": "%md\nNow let's take a look at the graph of top inetvention/conditions by number of trails:\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:39:04+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675039103230_1784617754",
+      "id": "paragraph_1675039103230_1784617754",
+      "dateCreated": "2023-01-30T00:38:23+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:19437",
+      "dateFinished": "2023-01-30T00:38:52+0000",
+      "dateStarted": "2023-01-30T00:38:52+0000",
+      "title": "Graph Visualization",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Now let&rsquo;s take a look at the graph of top inetvention/conditions by number of trails:</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%python\nbrain_diseases_gpdf = sql(\"\"\"\n    SELECT cond, lower(condLabel) as condLabel, numTrials as n_trials, interv, lower(intervLabel) as intervLabel\n    from mesh_nct.brain_diseases\n    order by numTrials desc\n    limit 100\n    \"\"\").dropDuplicates().toPandas()\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:40:11+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675039132314_16486978",
+      "id": "paragraph_1675039132314_16486978",
+      "dateCreated": "2023-01-30T00:38:52+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:19531",
+      "dateFinished": "2023-01-30T00:39:17+0000",
+      "dateStarted": "2023-01-30T00:39:17+0000",
+      "title": "construct the network"
+    },
+    {
+      "text": "%python\nlabels = brain_diseases_gpdf[['cond', 'condLabel']].set_index('cond')['condLabel'].to_dict()\nlabels.update(brain_diseases_gpdf[['interv', 'intervLabel']].set_index('interv')['intervLabel'].to_dict())\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:40:44+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675039157850_2042138937",
+      "id": "paragraph_1675039157850_2042138937",
+      "dateCreated": "2023-01-30T00:39:17+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:19634",
+      "dateFinished": "2023-01-30T00:40:30+0000",
+      "dateStarted": "2023-01-30T00:40:30+0000",
+      "title": "add labels"
+    },
+    {
+      "text": "%python\nplt.figure(figsize=(20,10)) \npos = nx.layout.bipartite_layout(G, set(brain_diseases_gpdf['cond']), scale=2, align='horizontal', aspect_ratio=2)\nlabel_pos = {}\nfor cond in set(brain_diseases_gpdf['cond']):\n    label_pos[cond] = pos[cond] + [0, -0.1]\nfor interv in set(brain_diseases_gpdf['interv']):\n    label_pos[interv] = pos[interv] + [0, 0.1]\nnx.draw(G, pos)\nlabel_texts = nx.draw_networkx_labels(G, label_pos, labels=labels)\nfor cond in set(brain_diseases_gpdf['cond']):\n    label_texts[cond].set_rotation(22)\nfor cond in set(brain_diseases_gpdf['interv']):\n    label_texts[cond].set_rotation(22)\nweights = nx.get_edge_attributes(G,'weight')\n_ = nx.draw_networkx_edge_labels(G, pos, edge_labels=weights, font_color='r')",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:41:13+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675039230634_1187213440",
+      "id": "paragraph_1675039230634_1187213440",
+      "dateCreated": "2023-01-30T00:40:30+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:19735",
+      "dateFinished": "2023-01-30T00:41:13+0000",
+      "dateStarted": "2023-01-30T00:41:13+0000",
+      "title": "visualize the network"
+    },
+    {
+      "text": "%md\nHere we see that most of the interventions have only one condition which they are connected. There is only one exception to this, Galantamine. Now let's query the graph to get all interventions involving galantamine:\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:41:29+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675039273452_1648989867",
+      "id": "paragraph_1675039273452_1648989867",
+      "dateCreated": "2023-01-30T00:41:13+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:19858",
+      "dateFinished": "2023-01-30T00:41:29+0000",
+      "dateStarted": "2023-01-30T00:41:29+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Here we see that most of the interventions have only one condition which they are connected. There is only one exception to this, Galantamine. Now let&rsquo;s query the graph to get all interventions involving galantamine:</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "text": "val query = \"\"\"\n    |PREFIX schema: <http://schema.org/>\n    |PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n    |\n    |SELECT ?trial ?title ?date\n    |WHERE {\n    | ?trial schema:studySubject ?intev .\n    | ?intev rdfs:label ?intevName . \n    | FILTER(REGEX(?intevName, \"galantamine\", \"i\") )\n    | ?trial schema:startDate ?date .\n    | ?trial rdfs:label ?title .\n    |}\n    |\"\"\".stripMargin\n \nval results = triples.sparql(queryConfig, query).convertResults(Map())\ndisplay(results)\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-01-30T00:41:57+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675039289604_985917506",
+      "id": "paragraph_1675039289604_985917506",
+      "dateCreated": "2023-01-30T00:41:29+0000",
+      "status": "ERROR",
+      "focus": true,
+      "$$hashKey": "object:19952",
+      "dateFinished": "2023-01-30T00:41:45+0000",
+      "dateStarted": "2023-01-30T00:41:45+0000",
+      "title": "all interventions with Galantamine"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "colWidth": 12,
+        "fontSize": 9,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675039305094_812928183",
+      "id": "paragraph_1675039305094_812928183",
+      "dateCreated": "2023-01-30T00:41:45+0000",
+      "status": "READY",
+      "focus": true,
+      "$$hashKey": "object:20039"
+    }
+  ],
+  "name": "04_querying_derived_graph",
+  "id": "2HQMU3CHT",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {},
+  "path": "/graphster/04_querying_derived_graph"
+}

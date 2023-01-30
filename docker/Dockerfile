@@ -122,6 +122,8 @@ RUN wget -nv -O /tmp/graphster/graphster-core-assembly-${GRAPHSTER_VERSION}.jar 
     wget -nv -O /tmp/graphster/query-assembly-${GRAPHSTER_VERSION}.jar ${GRAPHSTER_URL}/${GRAPHSTER_VERSION}/query-assembly-${GRAPHSTER_VERSION}.jar && \
     mv /tmp/graphster/*.jar ${SPARK_HOME}/jars/
 
+COPY notebook/zeppelin/ ${ZEPPELIN_HOME}/notebook/
+
 
 USER 1000
 

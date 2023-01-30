@@ -1,0 +1,202 @@
+﻿{
+  "paragraphs": [
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675035032652_1307783763",
+      "id": "paragraph_1675035032652_1307783763",
+      "dateCreated": "2023-01-29T23:30:32+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:8865",
+      "text": "Knowledge Graphs are used to represent real-world entities and the relationships between them, and are often built by collecting and integrating data from a variety of sources. An important step in creating a knowledge graph is Data Fusion. Data fusion is the process of combining data from multiple sources into a single, coherent representation. It is often used in situations where there are multiple data sources that are providing information about the same phenomenon, and the goal is to use this information to make more accurate inferences or decisions.\n\nData fusion can involve a variety of techniques, such as filtering, data cleaning, feature extraction, and machine learning. The specific approach used will depend on the nature of the data and the goals of the fusion process.\n\nThis process involves:\n\nData collection: This involves gathering data from a variety of sources, such as databases, websites, and other online resources.\n\nData cleaning and preprocessing: This involves cleaning and formatting the data so that it can be integrated into the knowledge graph. This may include tasks such as deduplication, entity resolution, and data standardization.\n\nData integration: This involves integrating the data into the knowledge graph by creating nodes and edges that represent the entities and relationships in the data. This may also involve mapping data from different sources to a common schema or ontology, which defines the types of entities and relationships that can be represented in the knowledge graph.\n\nData enrichment: This involves adding additional information to the knowledge graph by integrating data from additional sources or using machine learning algorithms to generate new insights.\n\nOverall, data fusion in the context of knowledge graphs is a process of combining and integrating data from multiple sources in order to create a comprehensive and coherent representation of real-world entities and their relationships.\n\nIn these example notebooks, we use graphster library, developed by WiseCube to perform all the above mentioned steps and build a KG based on integrating clinical trails data with MeSH dataset.",
+      "dateUpdated": "2023-01-29T23:37:11+0000",
+      "dateFinished": "2023-01-29T23:37:11+0000",
+      "dateStarted": "2023-01-29T23:37:11+0000",
+      "title": "Creating a Knowledge Graph from MeSH and Clinical Trials",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Knowledge Graphs are used to represent real-world entities and the relationships between them, and are often built by collecting and integrating data from a variety of sources. An important step in creating a knowledge graph is Data Fusion. Data fusion is the process of combining data from multiple sources into a single, coherent representation. It is often used in situations where there are multiple data sources that are providing information about the same phenomenon, and the goal is to use this information to make more accurate inferences or decisions.</p>\n<p>Data fusion can involve a variety of techniques, such as filtering, data cleaning, feature extraction, and machine learning. The specific approach used will depend on the nature of the data and the goals of the fusion process.</p>\n<p>This process involves:</p>\n<p>Data collection: This involves gathering data from a variety of sources, such as databases, websites, and other online resources.</p>\n<p>Data cleaning and preprocessing: This involves cleaning and formatting the data so that it can be integrated into the knowledge graph. This may include tasks such as deduplication, entity resolution, and data standardization.</p>\n<p>Data integration: This involves integrating the data into the knowledge graph by creating nodes and edges that represent the entities and relationships in the data. This may also involve mapping data from different sources to a common schema or ontology, which defines the types of entities and relationships that can be represented in the knowledge graph.</p>\n<p>Data enrichment: This involves adding additional information to the knowledge graph by integrating data from additional sources or using machine learning algorithms to generate new insights.</p>\n<p>Overall, data fusion in the context of knowledge graphs is a process of combining and integrating data from multiple sources in order to create a comprehensive and coherent representation of real-world entities and their relationships.</p>\n<p>In these example notebooks, we use graphster library, developed by WiseCube to perform all the above mentioned steps and build a KG based on integrating clinical trails data with MeSH dataset.</p>\n\n</div>"
+          }
+        ]
+      }
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675035038949_1431326775",
+      "id": "paragraph_1675035038949_1431326775",
+      "dateCreated": "2023-01-29T23:30:38+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:8945",
+      "dateUpdated": "2023-01-29T23:37:03+0000",
+      "dateFinished": "2023-01-29T23:37:03+0000",
+      "dateStarted": "2023-01-29T23:37:03+0000",
+      "title": "Data",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<h2>MeSH Dataset</h2>\n<p>NCBI MeSH (Medical Subject Headings) is a comprehensive controlled vocabulary for the purpose of indexing biomedical literature. The MeSH dataset is a collection of terms and definitions that describe the various topics and concepts in the field of biomedicine. These terms are organized into a hierarchical structure, with broader terms at the top and more specific terms at the bottom. The MeSH dataset is used by researchers, clinicians, and other healthcare professionals to search for and retrieve relevant articles and other resources from the biomedical literature. It is maintained by the National Center for Biotechnology Information (NCBI) at the National Institutes of Health (NIH).</p>\n<p>For building a knowledge graph, setting up the configuration is the foundation. Specifically, keeping all the data source specific, and schema specific references. Let&rsquo;s look at how we built the config for this knowledge graph.</p>\n<h2>Clinical Trials Data</h2>\n<p>To build a clinical trails knowledge graph, we fuse MeSH graph with clinical trials data, obtained from ClinicalTrials.gov. This dataset which is regularly updated, contains information about all current and past trials for a given condition and the intervention that has been used. Note that this dataset is in tabular (csv) format. Using the Configuration notebook we setup parameters to be used for data fusion in the Enrichment and Fusion notebook.</p>\n<h2>Analysis</h2>\n<p>Finally we show how to query the derived graph using SPARQL query language directly on databricks to gain insights for all trials for Brain Diseases.</p>\n\n</div>"
+          }
+        ]
+      },
+      "text": "## MeSH Dataset\nNCBI MeSH (Medical Subject Headings) is a comprehensive controlled vocabulary for the purpose of indexing biomedical literature. The MeSH dataset is a collection of terms and definitions that describe the various topics and concepts in the field of biomedicine. These terms are organized into a hierarchical structure, with broader terms at the top and more specific terms at the bottom. The MeSH dataset is used by researchers, clinicians, and other healthcare professionals to search for and retrieve relevant articles and other resources from the biomedical literature. It is maintained by the National Center for Biotechnology Information (NCBI) at the National Institutes of Health (NIH).\n\nFor building a knowledge graph, setting up the configuration is the foundation. Specifically, keeping all the data source specific, and schema specific references. Let's look at how we built the config for this knowledge graph.\n\n## Clinical Trials Data\nTo build a clinical trails knowledge graph, we fuse MeSH graph with clinical trials data, obtained from ClinicalTrials.gov. This dataset which is regularly updated, contains information about all current and past trials for a given condition and the intervention that has been used. Note that this dataset is in tabular (csv) format. Using the Configuration notebook we setup parameters to be used for data fusion in the Enrichment and Fusion notebook.\n\n## Analysis\nFinally we show how to query the derived graph using SPARQL query language directly on databricks to gain insights for all trials for Brain Diseases."
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675035052438_1568559320",
+      "id": "paragraph_1675035052438_1568559320",
+      "dateCreated": "2023-01-29T23:30:52+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:9057",
+      "dateUpdated": "2023-01-29T23:37:03+0000",
+      "dateFinished": "2023-01-29T23:37:03+0000",
+      "dateStarted": "2023-01-29T23:37:03+0000",
+      "title": "RDF Format and Semantic Triples",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>We will building our graph in an RDF format. That means that everything in the graph is a triple. A triple is an encoding of a fact. Relationships between entities are expressed as SUBJECT-PREDICATE-OBJECT. The SUBJECT and OBJECT are nodes in our graph, and the PREDICATE is the relation or edge type in our graph. In RDF there are primarily three kinds of nodes. The first is the URI nodes which represent the actual entities.</p>\n<p><a href=\"http:data.com/id123\">http:data.com/id123</a> A URI node has two parts, a namespace and a local ID. A namespace is a prefix that you can use to organize your entities into different types, or different sources. The local ID is the ID of that entity in that namespace.</p>\n<p>The next type of node is the blank node which is used as a stand-in for a missing entity, or as a dummy node to create sophisticated subtructures in the graph. _:123xyz The blank node is repesented only by a unique ID. We will not be using blank nodes in this demo.</p>\n<p>The third type of node is the literal node. Literals come themselves in two subtypes, data literals and language literals.</p>\n<p>&ldquo;2021-08-18&rdquo;^^<a href=\"http://www.w3.org/2001/XMLSchema#date\">http://www.w3.org/2001/XMLSchema#date</a> A data literal represents a number, boolean, or a string that does not come from a language (e.g. an ID). Data literals have two parts, the &ldquo;lex&rdquo; or &ldquo;lexical form&rdquo;, which is the string representing the data, and the data type which is a URI that determines how the string should be interpreted.<br />\n&ldquo;Leukemia&rdquo;@en Language literals represent a string from a human language. These also have two parts, the lex, and the language which is usually a ISO 2 Letter Language Code (e.g. en), but can also be specified to regions (e.g. en-gb)<br />\nThere are many existing datasets that available in RDF format. The big difficulty in building knowledges in RDF (or even in other kinds of graphs), is merging different data sources, and making them available in a scalable way. So, let&rsquo;s look at how this library can help.</p>\n\n</div>"
+          }
+        ]
+      },
+      "text": "We will building our graph in an RDF format. That means that everything in the graph is a triple. A triple is an encoding of a fact. Relationships between entities are expressed as SUBJECT-PREDICATE-OBJECT. The SUBJECT and OBJECT are nodes in our graph, and the PREDICATE is the relation or edge type in our graph. In RDF there are primarily three kinds of nodes. The first is the URI nodes which represent the actual entities.\n\n<http:data.com/id123> A URI node has two parts, a namespace and a local ID. A namespace is a prefix that you can use to organize your entities into different types, or different sources. The local ID is the ID of that entity in that namespace.\n\nThe next type of node is the blank node which is used as a stand-in for a missing entity, or as a dummy node to create sophisticated subtructures in the graph. _:123xyz The blank node is repesented only by a unique ID. We will not be using blank nodes in this demo.\n\nThe third type of node is the literal node. Literals come themselves in two subtypes, data literals and language literals.\n\n\"2021-08-18\"^^<http://www.w3.org/2001/XMLSchema#date> A data literal represents a number, boolean, or a string that does not come from a language (e.g. an ID). Data literals have two parts, the \"lex\" or \"lexical form\", which is the string representing the data, and the data type which is a URI that determines how the string should be interpreted.\n\"Leukemia\"@en Language literals represent a string from a human language. These also have two parts, the lex, and the language which is usually a ISO 2 Letter Language Code (e.g. en), but can also be specified to regions (e.g. en-gb)\nThere are many existing datasets that available in RDF format. The big difficulty in building knowledges in RDF (or even in other kinds of graphs), is merging different data sources, and making them available in a scalable way. So, let's look at how this library can help.\n\n"
+    },
+    {
+      "user": "anonymous",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1675035176831_1051465195",
+      "id": "paragraph_1675035176831_1051465195",
+      "dateCreated": "2023-01-29T23:32:56+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:9187",
+      "dateUpdated": "2023-01-29T23:37:04+0000",
+      "dateFinished": "2023-01-29T23:37:04+0000",
+      "dateStarted": "2023-01-29T23:37:04+0000",
+      "title": "Graphster Library",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Graphster is an open-source knowledge graph library. It is a spark-based library purpose-built for scalable, end-to-end knowledge graph construction and querying from unstructured and structured source data. The graphster library takes a collection of documents, extracts mentions and relations to populate a raw knowledge graph, links mentions to entities in Wikidata, and then enriches the knowledge graph with facts from Wikidata. Once the knowledge graph is built, graphster can also help natively query the knowledge graph using SPARQL.</p>\n<p>In this solution accelerator we showcase an end-to-end example of using this library to build a KG for clinical trials data.</p>\n<p><img src=\"https://raw.githubusercontent.com/wisecubeai/graphster/master/website/graphster_architecture_diagram.png\" alt=\" Graphster \" /></p>\n\n</div>"
+          }
+        ]
+      },
+      "text": "Graphster is an open-source knowledge graph library. It is a spark-based library purpose-built for scalable, end-to-end knowledge graph construction and querying from unstructured and structured source data. The graphster library takes a collection of documents, extracts mentions and relations to populate a raw knowledge graph, links mentions to entities in Wikidata, and then enriches the knowledge graph with facts from Wikidata. Once the knowledge graph is built, graphster can also help natively query the knowledge graph using SPARQL.\n\nIn this solution accelerator we showcase an end-to-end example of using this library to build a KG for clinical trials data.\n\n![ Graphster ](https://raw.githubusercontent.com/wisecubeai/graphster/master/website/graphster_architecture_diagram.png)\n"
+    }
+  ],
+  "name": "00_README",
+  "id": "2HQP85EUK",
+  "defaultInterpreterGroup": "md",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {},
+  "path": "/graphster/00_README"
+}
