@@ -4,8 +4,8 @@ version := "0.1"
 
 scalaVersion := "2.11.12"
 
-resolvers += "Restlet Repository" at "http://maven.restlet.org"
-resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
+resolvers += "Restlet Repository" at "https://maven.restlet.talend.com"
+resolvers += "Spark Packages Repo" at "https://repos.spark-packages.org"
 
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.9"
